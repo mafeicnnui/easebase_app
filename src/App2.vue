@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-      <userTree/>
+      <div>
+          <router-link to="/addUser">addUser</router-link>
+          <router-link to="/queryUser">queryUser</router-link>
+          <router-link to="/changeUser">changeUser</router-link>
+      </div>
+      <router-view></router-view>
   </div>
 </template>
 

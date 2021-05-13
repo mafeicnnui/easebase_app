@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-      <userTree/>
+      <userTree2/>
   </div>
 </template>
 
 <script>
-import userTree from './components/userTree.vue'
+import userTree2 from './components/userTree2.vue'
 
 export default {
   name: 'App',
   components: {
     // eslint-disable-next-line vue/no-unused-components
-    userTree
+    userTree2
   }
 }
 </script>

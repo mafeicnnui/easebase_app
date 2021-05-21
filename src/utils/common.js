@@ -50,8 +50,26 @@ export  function get_tree() {
     return result;
 }
 
+export  function get_dm(p_dm) {
+    let result ;
+    $.ajax({
+        url: "http://10.16.47.114:9000/dm",
+        type: "post",
+        datatype: "json",
+        async:false,
+        data:{
+            dm: p_dm,
+        },
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
 export default {
     formatDate,
     stringFormat,
-    get_tree
+    get_tree,
+    get_dm
 };

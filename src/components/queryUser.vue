@@ -101,9 +101,12 @@
 
 <script>
   import  axios from 'axios'
+  import utils from "@/utils/common";
+  import config from "@/utils/config";
   export default {
     data() {
         return {
+            svr:config(),
             user_name: '',
             tableData: [],
             currentPage: 1, // 当前页码
@@ -127,7 +130,7 @@
       queryUser() {
         axios({
           method: 'get',
-          url: 'http://10.16.47.114:9000/user',
+          url: utils.stringFormat("http://{0}:{1}/user",[this.svr['server_ip'], this.svr['server_port']]),
           params: {
             name  : this.user_name,
           },

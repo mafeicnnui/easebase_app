@@ -1,5 +1,7 @@
-// import axios from "axios";
 import $ from 'jquery'
+import config from './config'
+
+let cfg = config();
 
 export function stringFormat (formatted, args) {
     for (let i = 0; i < args.length; i++) {
@@ -36,9 +38,9 @@ export function formatDate(date, fmt) {
 }
 
 export  function get_tree() {
-    let result ;
+    let result = '' ;
     $.ajax({
-        url: "http://10.16.47.114:9000/tree2",
+        url: stringFormat("http://{0}:{1}/tree2",[cfg.server_ip, cfg.server_port]),
         type: "post",
         datatype: "json",
         async:false,
@@ -51,9 +53,10 @@ export  function get_tree() {
 }
 
 export  function get_dm(p_dm) {
-    let result ;
+    let result = '';
     $.ajax({
-        url: "http://10.16.47.114:9000/dm",
+        //url: "http://10.16.47.114:9000/dm",
+        url: stringFormat("http://{0}:{1}/dm",[cfg.server_ip, cfg.server_port]),
         type: "post",
         datatype: "json",
         async:false,
@@ -67,9 +70,39 @@ export  function get_dm(p_dm) {
     return result;
 }
 
+export  function get_backup_server() {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/backup/server",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        datatype: "json",
+        async:false,
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
+export  function get_ds_server() {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/ds/server",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        datatype: "json",
+        async:false,
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
 export default {
     formatDate,
     stringFormat,
     get_tree,
-    get_dm
+    get_dm,
+    get_backup_server,
+    get_ds_server
 };

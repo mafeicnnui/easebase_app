@@ -9,18 +9,26 @@ Vue.use(VueRouter)
 import addUser      from '@/components/addUser';
 import queryUser    from '@/components/queryUser';
 import changeUser   from '@/components/changeUser';
+
 import addMenu      from "@/components/addMenu";
 import queryMenu    from "@/components/queryMenu";
 import changeMenu   from "@/components/changeMenu";
+
 import addRole      from '@/components/addRole';
 import queryRole    from '@/components/queryRole';
 import changeRole   from '@/components/changeRole';
+
 import addDs        from "@/components/addDs";
 import queryDs      from "@/components/queryDs";
 import changeDs     from '@/components/changeDs';
+
 import addServer    from "@/components/addServer";
 import queryServer  from "@/components/queryServer";
 import changeServer from '@/components/changeServer';
+
+import addBackup    from "@/components/addBackup";
+import queryBackup  from '@/components/queryBackup';
+import changeBackup from '@/components/changeBackup';
 
 
 //定义routes路由的集合，数组类型
@@ -50,6 +58,11 @@ const routes=[
     { path:'/server_add',component:addServer},
     { path:"/server_query",component:queryServer},
     { path:"/server_change",component:changeServer},
+
+    // backup router
+    { path:'/backup_add',component:addBackup},
+    { path:"/backup_query",component:queryBackup},
+    { path:"/backup_change",component:changeBackup},
 
     // default router
     { path:'',component:queryUser},

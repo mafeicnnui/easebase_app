@@ -20,7 +20,7 @@
 
     npm run serve
         
-六、编译 
+六、编译打包
 
     npm run build
 

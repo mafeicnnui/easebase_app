@@ -98,11 +98,54 @@ export  function get_ds_server() {
     return result;
 }
 
+export  function get_backup_tasks(p_db_env,p_db_type) {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/backup/task",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        datatype: "json",
+        async:false,
+        data:{
+            db_env: p_db_env,
+            db_type: p_db_type,
+        },
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
+export function getBeforeDate(n) {
+    var d = new Date();
+    var year = d.getFullYear();
+    var mon = d.getMonth() + 1;
+    var day = d.getDate();
+    if(day <= n) {
+        if(mon > 1) {
+            mon = mon - 1;
+        } else {
+            year = year - 1;
+            mon = 12;
+        }
+    }
+    d.setDate(d.getDate() - n);
+    year = d.getFullYear();
+    mon = d.getMonth() + 1;
+    day = d.getDate();
+    let s = year + "-" + (mon < 10 ? ('0' + mon) : mon) + "-" + (day < 10 ? ('0' + day) : day);
+    return s;
+}
+
+
 export default {
     formatDate,
     stringFormat,
     get_tree,
     get_dm,
     get_backup_server,
-    get_ds_server
+    get_ds_server,
+    get_backup_tasks,
+    getBeforeDate
+
 };

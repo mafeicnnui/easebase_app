@@ -29,7 +29,8 @@ import changeServer from '@/components/changeServer';
 import addBackup    from "@/components/addBackup";
 import queryBackup  from '@/components/queryBackup';
 import changeBackup from '@/components/changeBackup';
-
+import queryBackupLog  from '@/components/queryBackupLog';
+import analyzeBackupLog from "@/components/analyzeBackupLog";
 
 //定义routes路由的集合，数组类型
 const routes=[
@@ -63,6 +64,8 @@ const routes=[
     { path:'/backup_add',component:addBackup},
     { path:"/backup_query",component:queryBackup},
     { path:"/backup_change",component:changeBackup},
+    { path:"/backup_log_query",component:queryBackupLog},
+    { path:"/backup_log_analyze",component:analyzeBackupLog},
 
     // default router
     { path:'',component:queryUser},

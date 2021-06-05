@@ -1,30 +1,43 @@
 <template>
   <el-form  label-width="120px">
     <el-form-item label=""> </el-form-item>
-    <el-row type="flex">
-      <el-col :span="5">
-        <el-form-item label="任务描述">
-          <el-input placeholder="请输入标签名" v-model="queryForm.db_tag" @input="changeValue" style="width:100%"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="5">
-        <el-form-item label="数据库环境">
-          <el-select v-model="queryForm.db_env" placeholder="请选择数据库环境" style="width:100%">
-            <el-option v-for="dm in queryForm.dm_db_env"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="5">
-        <el-form-item label="数据库类型">
-          <el-select v-model="queryForm.db_type" placeholder="请选择数据库类型" style="width:100%">
-            <el-option v-for="dm in queryForm.dm_db_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="2">
-        <el-button type="primary" @click="queryBackup">查询</el-button>
-      </el-col>
-    </el-row>
+    <el-col :span="4">
+      <el-form-item label="同步标签">
+        <el-input placeholder="请输入标签名" v-model="queryForm.syncTag" @input="changeValue" style="width:100%"></el-input>
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <el-form-item label="项目名">
+        <el-select v-model="queryForm.market_id" placeholder="请选择项目名" style="width:100%">
+          <el-option v-for="dm in queryForm.dm_market_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <el-form-item label="业务类型">
+        <el-select v-model="queryForm.sync_ywlx" placeholder="请选择业务类型" style="width:100%">
+          <el-option v-for="dm in queryForm.dm_sync_ywlx"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <el-form-item label="数据方向">
+        <el-select v-model="queryForm.sync_type" placeholder="请选择数据方向" style="width:100%">
+          <el-option v-for="dm in queryForm.dm_sync_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-col>
+    <el-col :span="4">
+      <el-form-item label="任务状态">
+        <el-select v-model="queryForm.status"  style="width:100px">
+          <el-option label="启用" value="1"></el-option>
+          <el-option label="禁用" value="2"></el-option>
+        </el-select>
+      </el-form-item>
+    </el-col>
+    <el-col :span="2">
+      <el-button type="primary" @click="querySync">查询</el-button>
+    </el-col>
     <br>
     <el-table
             :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -39,12 +52,22 @@
               width="80">
       </el-table-column>
       <el-table-column
-              prop="comments"
-              label="任务描述" >
+              prop="sync_tag_"
+              label="同步标识">
       </el-table-column>
       <el-table-column
-              prop="db_tag"
-              label="标签名">
+              prop="comments"
+              label="任务描述">
+      </el-table-column>
+      <el-table-column
+              prop="sync_server"
+              label="同步服务器"
+              width="200">
+      </el-table-column>
+      <el-table-column
+              prop="sync_ywlx"
+              label="业务类型"
+              width="120">
       </el-table-column>
       <el-table-column
               prop="run_time"
@@ -58,22 +81,13 @@
       </el-table-column>
       <el-table-column
               prop="status"
-              label="备份状态"
-              width="120">
-      </el-table-column>
-      <el-table-column
-              prop="task_status"
-              label="任务状态"
-              width="120">
-      </el-table-column>
-      <el-table-column
-              prop="last_update_date"
-              label="最近更新时间" >
+              label="同步状态"
+              width="100">
       </el-table-column>
       <el-table-column
               fixed="right"
               label="操作"
-              width="250">
+              width="220">
         <template slot-scope="scope">
           <el-button
                   size="mini"
@@ -84,11 +98,12 @@
           <el-button
                   size="mini"
                   type="danger"
-                  @click="delBackup(scope.$index, scope.row)">删除</el-button>
+                  @click="delSync(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
 
     </el-table>
+
     <div class="block" style="margin-top:15px;">
       <el-pagination
               align='center'
@@ -200,7 +215,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="updBackup">更新</el-button>
+          <el-button type="primary" @click="updSync">更新</el-button>
       </div>
     </el-dialog>
 
@@ -216,11 +231,14 @@
     data() {
         return {
           queryForm:{
-            db_tag:'',
-            db_env:'',
-            db_type:'',
-            dm_db_type:[],
-            dm_db_env:[],
+            syncTag :'',
+            market_id:'',
+            sync_ywlx:'',
+            sync_type:'',
+            status:'1',
+            dm_market_id:[],
+            dm_sync_ywlx:[],
+            dm_sync_type:[],
           },
           editForm:{
             id:'',
@@ -263,30 +281,36 @@
         this.currentPage = val;
       },
       changeValue: function() {
-        this.queryBackup()
+        this.querySync()
       },
-      queryBackup() {
+      querySync() {
         ajax({
           method: 'get',
-          url: utils.stringFormat("http://{0}:{1}/backup",[this.svr['server_ip'], this.svr['server_port']]),
+          url: utils.stringFormat("http://{0}:{1}/sync",[this.svr['server_ip'], this.svr['server_port']]),
           params: {
-            db_tag   : this.queryForm.db_tag,
-            db_env   : this.queryForm.db_env,
-            db_type  : this.queryForm.db_type,
+            sync_tag    : this.queryForm.sync_tag,
+            market_id   : this.queryForm.market_id,
+            sync_ywlx   : this.queryForm.sync_ywlx,
+            sync_type   : this.queryForm.sync_type,
+            status      : this.queryForm.status,
           },
           timeout: 10000,
         }).then((res) => {
           if (res.data['Code'] == 200 ) {
-            this.tableData =res.data['Data']
+            if (res.data['Data'] != null) {
+              this.tableData =res.data['Data']
+            } else {
+              this.tableData =[]
+            }
           }
         }).catch((error) => {
           console.log('error=',error);
         });
       },
-      updBackup:function(){
+      updSync:function(){
         ajax({
           method: 'Post',
-          url: utils.stringFormat("http://{0}:{1}/backup",[this.svr['server_ip'], this.svr['server_port']]),
+          url: utils.stringFormat("http://{0}:{1}/sync",[this.svr['server_ip'], this.svr['server_port']]),
           params: {
             id                : this.editForm.id,
             server_id         : this.editForm.server_id,
@@ -329,7 +353,7 @@
         //获取服务器信息
         ajax({
           method: 'get',
-          url: utils.stringFormat("http://{0}:{1}/backup/{2}",[this.svr['server_ip'], this.svr['server_port'],row.id]),
+          url: utils.stringFormat("http://{0}:{1}/sync/{2}",[this.svr['server_ip'], this.svr['server_port'],row.id]),
           timeout: 10000,
         }).then((res) => {
           if (res.data['Code'] == 200 ) {
@@ -356,13 +380,13 @@
       openDetail:function(index,row){
         console.log('openDetail=',index,row)
       },
-      delBackup:function(index,row) {
+      delSync:function(index,row) {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          ajax.delete(utils.stringFormat("http://{0}:{1}/backup",[this.svr['server_ip'], this.svr['server_port']]),
+          ajax.delete(utils.stringFormat("http://{0}:{1}/sync",[this.svr['server_ip'], this.svr['server_port']]),
                   { params:
                             {
                               id:row.id
@@ -375,7 +399,7 @@
                 position: 'top-right',
                 type: 'success'
               });
-              this.queryBackup();
+              this.querySync();
             } else {
               this.$notify.error({
                 title: '错误',
@@ -399,14 +423,17 @@
       },
     },
     mounted: function() {
-      this.queryForm.dm_market_id=''
-      this.queryForm.dm_db_type= utils.get_dm('02')
-      this.queryForm.dm_db_env=utils.get_dm('03')
+      this.querySync();
+      this.queryForm.dm_market_id=utils.get_dm('05')
+      this.queryForm.dm_sync_ywlx= utils.get_dm('08')
+      this.queryForm.dm_sync_type=utils.get_dm('09')
+
+
       //editForm init
-      this.editForm.dm_server_id = utils.get_backup_server();
-      this.editForm.dm_db_id = utils.get_ds_server();
-      this.editForm.dm_db_type= utils.get_dm('02')
-      this.queryBackup();
+      // this.editForm.dm_server_id = utils.get_backup_server();
+      // this.editForm.dm_db_id = utils.get_ds_server();
+      // this.editForm.dm_db_type= utils.get_dm('02')
+      // this.queryBackup();
     }
   }
 

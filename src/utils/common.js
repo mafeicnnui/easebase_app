@@ -84,6 +84,20 @@ export  function get_backup_server() {
     return result;
 }
 
+export  function get_sync_server() {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/sync/server",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        datatype: "json",
+        async:false,
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
 export  function get_ds_server() {
     let result = '';
     $.ajax({
@@ -144,6 +158,7 @@ export default {
     get_tree,
     get_dm,
     get_backup_server,
+    get_sync_server,
     get_ds_server,
     get_backup_tasks,
     getBeforeDate

@@ -32,6 +32,13 @@ import changeBackup from '@/components/changeBackup';
 import queryBackupLog  from '@/components/queryBackupLog';
 import analyzeBackupLog from "@/components/analyzeBackupLog";
 
+import addSync    from "@/components/addSync";
+import querySync  from '@/components/querySync';
+import changeSync from '@/components/changeSync';
+import querySyncLog  from '@/components/querySyncLog';
+import analyzeSyncLog from "@/components/analyzeSyncLog";
+
+
 //定义routes路由的集合，数组类型
 const routes=[
     //单个路由均为对象类型，path代表的是路径，component代表组件
@@ -66,6 +73,13 @@ const routes=[
     { path:"/backup_change",component:changeBackup},
     { path:"/backup_log_query",component:queryBackupLog},
     { path:"/backup_log_analyze",component:analyzeBackupLog},
+
+    // sync router
+    { path:'/sync_add',component:addSync},
+    { path:"/sync_query",component:querySync},
+    { path:"/sync_change",component:changeSync},
+    { path:"/sync_log_query",component:querySyncLog},
+    { path:"/sync_log_analyze",component:analyzeSyncLog},
 
     // default router
     { path:'',component:queryUser},

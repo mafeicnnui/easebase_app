@@ -43,11 +43,8 @@
             </el-form-item>
         </el-col>
         <el-col :span="2">
-            <el-form-item >
-               <el-button type="primary" @click="queryBackupLog">查询</el-button>
-            </el-form-item>
+            <el-button type="primary" @click="queryBackupLog">查询</el-button>
         </el-col>
-
     </el-row>
     <br>
     <el-col :span="24">

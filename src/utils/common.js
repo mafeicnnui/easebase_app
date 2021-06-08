@@ -130,6 +130,23 @@ export  function get_backup_tasks(p_db_env,p_db_type) {
     return result;
 }
 
+export  function get_sync_tasks(p_market_id) {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/sync/task",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        datatype: "json",
+        async:false,
+        data:{
+            market_id: p_market_id,
+        },
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
 export function getBeforeDate(n) {
     var d = new Date();
     var year = d.getFullYear();
@@ -161,6 +178,7 @@ export default {
     get_sync_server,
     get_ds_server,
     get_backup_tasks,
+    get_sync_tasks,
     getBeforeDate
 
 };

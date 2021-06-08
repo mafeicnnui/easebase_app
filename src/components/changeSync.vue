@@ -8,21 +8,21 @@
     </el-col>
     <el-col :span="4">
       <el-form-item label="项目名">
-        <el-select v-model="queryForm.market_id" placeholder="请选择项目名" style="width:100%">
+        <el-select v-model="queryForm.marketId" placeholder="请选择项目名" style="width:100%">
           <el-option v-for="dm in queryForm.dm_market_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
         </el-select>
       </el-form-item>
     </el-col>
     <el-col :span="4">
       <el-form-item label="业务类型">
-        <el-select v-model="queryForm.sync_ywlx" placeholder="请选择业务类型" style="width:100%">
+        <el-select v-model="queryForm.syncYwlx" placeholder="请选择业务类型" style="width:100%">
           <el-option v-for="dm in queryForm.dm_sync_ywlx"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
         </el-select>
       </el-form-item>
     </el-col>
     <el-col :span="4">
       <el-form-item label="数据方向">
-        <el-select v-model="queryForm.sync_type" placeholder="请选择数据方向" style="width:100%">
+        <el-select v-model="queryForm.syncType" placeholder="请选择数据方向" style="width:100%">
           <el-option v-for="dm in queryForm.dm_sync_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
         </el-select>
       </el-form-item>
@@ -67,7 +67,7 @@
       <el-table-column
               prop="sync_ywlx"
               label="业务类型"
-              width="120">
+              width="110">
       </el-table-column>
       <el-table-column
               prop="run_time"
@@ -82,7 +82,7 @@
       <el-table-column
               prop="status"
               label="同步状态"
-              width="100">
+              width="80">
       </el-table-column>
       <el-table-column
               fixed="right"
@@ -116,96 +116,144 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible">
+    <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" :width="dialogWidth">
       <el-form :inline="true"  ref="editForm" :model="editForm" label-width="100px">
         <el-form-item label=""> </el-form-item>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="备份服务器">
-              <el-select v-model="editForm.server_id" placeholder="请选择备份服务器" style="width:240px;">
+          <el-col :span="8">
+            <el-form-item label="同步服务器">
+              <el-select v-model="editForm.server_id" placeholder="请选择同步服务器" style="width:240px;">
                 <el-option v-for="dm in editForm.dm_server_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="数据库服务">
-              <el-select v-model="editForm.db_id" placeholder="请选择数据库服务" style="width:240px">
+          <el-col :span="8">
+            <el-form-item label="源数据库">
+              <el-select v-model="editForm.sour_db_id" placeholder="请选择源数据库" style="width:240px">
+                <el-option v-for="dm in editForm.dm_db_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="目标数据库">
+              <el-select v-model="editForm.dest_db_id" placeholder="请选择目标数据库" style="width:240px">
                 <el-option v-for="dm in editForm.dm_db_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="数据库类型">
-              <el-select v-model="editForm.db_type" placeholder="请选择数据库类型" style="width:240px">
-                <el-option v-for="dm in editForm.dm_db_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+          <el-col :span="8">
+            <el-form-item label="同步标识号">
+              <el-input placeholder="请输入同步标识号" v-model="editForm.sync_tag"  style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="同步业务类型">
+              <el-select v-model="editForm.sync_ywlx" placeholder="请选择业务类型" style="width:240px">
+                <el-option v-for="dm in editForm.dm_sync_ywlx"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="备份标识号">
-              <el-input placeholder="请输入备份标识号" v-model="editForm.db_tag"  style="width:240px"></el-input>
+          <el-col :span="8">
+            <el-form-item label="同步数据方向">
+              <el-select v-model="editForm.sync_type" placeholder="请选择业务类型" style="width:240px">
+                <el-option v-for="dm in editForm.dm_sync_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
-            <el-form-item label="备份有效期">
-              <el-input placeholder="请输入备份有效期" v-model="editForm.expire"  style="width:240px"></el-input>
+          <el-col :span="8">
+            <el-form-item label="同步主目录">
+              <el-input placeholder="请输入同步主目录" v-model="editForm.script_path" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="备份主目录">
-              <el-input placeholder="请输入备份主目录" v-model="editForm.bk_base" style="width:240px"></el-input>
+          <el-col :span="8">
+            <el-form-item label="同步脚本名">
+              <el-input placeholder="请输入同步脚本名" v-model="editForm.script_file" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="脚本主目录">
-              <el-input placeholder="请输入脚本主目录" v-model="editForm.script_path"  style="width:240px"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="备份脚本名">
-              <el-input placeholder="请输入备份脚本名" v-model="editForm.script_file" style="width:240px"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="备份命令名">
-              <el-input placeholder="请输入备份命令名" v-model="editForm.bk_cmd"  style="width:240px"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="运行时间">
               <el-input placeholder="请输入运行时间" v-model="editForm.run_time" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="任务描述">
               <el-input placeholder="请输入任务描述" v-model="editForm.comments" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="备份数据库">
-              <el-input placeholder="请输入备份数据库" v-model="editForm.backup_databases" style="width:240px"></el-input>
+          <el-col :span="8">
+            <el-form-item label="源数据库名">
+              <el-input placeholder="请输入源数据库名" v-model="editForm.sync_schema" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="目标数据库名">
+              <el-input placeholder="请输入目标数据库名" v-model="editForm.sync_schema_dest" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="8">
+            <el-form-item label="同步表列表">
+              <el-input placeholder="请输入同步表列表" v-model="editForm.sync_table" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="全量批大小">
+              <el-input placeholder="请输入全量批大小" v-model="editForm.batch_size" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="增量批大小">
+              <el-input placeholder="请输入增量批大小" v-model="editForm.batch_size_incr" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="同步间隔">
+              <el-input placeholder="请输入同步间隔" v-model="editForm.sync_gap" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="同步列名">
+              <el-input placeholder="请输入同步列名" v-model="editForm.sync_col_name" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="同步列值">
+              <el-input placeholder="请输入同步列值" v-model="editForm.sync_col_val" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="时间类型">
+              <el-select v-model="editForm.sync_time_type" placeholder="请选择时间类型" style="width:240px">
+                <el-option v-for="dm in editForm.dm_sync_time_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="修复天数">
+              <el-input placeholder="请输入修复天数" v-model="editForm.sync_repair_day" style="width:240px"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
             <el-form-item label="API服务器">
               <el-input placeholder="请输入API服务器" v-model="editForm.api_server" style="width:240px"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+        </el-row>
+        <el-row>
+          <el-col :span="8">
             <el-form-item label="任务状态">
-              <el-select v-model="editForm.status"  style="width:250px">
+              <el-select v-model="editForm.status"  style="width:240px">
                 <el-option label="启用" value="1"></el-option>
                 <el-option label="禁用" value="0"></el-option>
               </el-select>
@@ -230,11 +278,12 @@
   export default {
     data() {
         return {
+          dialogWidth: "1200px",
           queryForm:{
             syncTag :'',
-            market_id:'',
-            sync_ywlx:'',
-            sync_type:'',
+            marketId:'',
+            syncYwlx:'',
+            syncType:'',
             status:'1',
             dm_market_id:[],
             dm_sync_ywlx:[],
@@ -243,22 +292,33 @@
           editForm:{
             id:'',
             server_id:'',
-            db_id: '',
-            db_type: '',
-            db_tag:'',
-            expire:'',
-            bk_base:'',
+            sour_db_id:'',
+            dest_db_id:'',
+            sync_tag:'',
+            sync_ywlx: '',
+            sync_type:'',
             script_path:'',
             script_file:'',
-            bk_cmd:'',
             run_time:'',
             comments:'',
-            backup_databases:'',
+            sync_schema:'',
+            sync_schema_dest:'',
+            sync_table:'',
+            batch_size:'',
+            batch_size_incr:'',
+            sync_gap:'',
+            sync_col_val:'',
+            sync_col_name:'',
+            sync_time_type:'',
+            sync_repair_day:'',
             api_server:'',
             status:'',
             dm_server_id:[],
             dm_db_id:[],
             dm_db_type:[],
+            dm_sync_ywlx:[],
+            dm_sync_type:[],
+            dm_sync_time_type:[]
           },
           svr:config(),
           tableData: [],
@@ -271,6 +331,15 @@
           }
     },
     methods:{
+      setDialogWidth() {
+          let val = document.body.clientWidth
+          const def = 800 // 默认宽度
+          if (val < def) {
+            this.dialogWidth = '100%'
+          } else {
+            this.dialogWidth = val*0.7 + 'px'
+          }
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         this.currentPage = 1;
@@ -284,14 +353,15 @@
         this.querySync()
       },
       querySync() {
+        console.log(this.queryForm)
         ajax({
           method: 'get',
           url: utils.stringFormat("http://{0}:{1}/sync",[this.svr['server_ip'], this.svr['server_port']]),
           params: {
-            sync_tag    : this.queryForm.sync_tag,
-            market_id   : this.queryForm.market_id,
-            sync_ywlx   : this.queryForm.sync_ywlx,
-            sync_type   : this.queryForm.sync_type,
+            syncTag    : this.queryForm.syncTag,
+            marketId   : this.queryForm.marketId,
+            syncYwlx   : this.queryForm.syncYwlx,
+            syncType   : this.queryForm.syncType,
             status      : this.queryForm.status,
           },
           timeout: 10000,
@@ -314,17 +384,25 @@
           params: {
             id                : this.editForm.id,
             server_id         : this.editForm.server_id,
-            db_id             : this.editForm.db_id,
-            db_type           : this.editForm.db_type,
-            db_tag            : this.editForm.db_tag,
-            expire            : this.editForm.expire,
-            bk_base           : this.editForm.bk_base,
+            sour_db_id        : this.editForm.sour_db_id,
+            dest_db_id        : this.editForm.dest_db_id,
+            sync_tag          : this.editForm.sync_tag,
+            sync_ywlx         : this.editForm.sync_ywlx,
+            sync_type         : this.editForm.sync_type,
             script_path       : this.editForm.script_path,
             script_file       : this.editForm.script_file,
-            bk_cmd            : this.editForm.bk_cmd,
             run_time          : this.editForm.run_time,
             comments          : this.editForm.comments,
-            backup_databases  : this.editForm.backup_databases,
+            sync_schema       : this.editForm.sync_schema,
+            sync_schema_dest  : this.editForm.sync_schema_dest,
+            sync_table        : this.editForm.sync_table,
+            batch_size        : this.editForm.batch_size,
+            batch_size_incr   : this.editForm.batch_size_incr,
+            sync_gap          : this.editForm.sync_gap,
+            sync_col_val      : this.editForm.sync_col_val,
+            sync_col_name     : this.editForm.sync_col_name,
+            sync_time_type    : this.editForm.sync_time_type,
+            sync_repair_day   : this.editForm.sync_repair_day,
             api_server        : this.editForm.api_server,
             status            : this.editForm.status,
           },
@@ -357,21 +435,29 @@
           timeout: 10000,
         }).then((res) => {
           if (res.data['Code'] == 200 ) {
-             this.editForm.id               = res.data['Data'].Id
-             this.editForm.server_id        = res.data['Data'].ServerId
-             this.editForm.db_id            = res.data['Data'].DbId
-             this.editForm.db_type          = res.data['Data'].DbType
-             this.editForm.db_tag           = res.data['Data'].DbTag
-             this.editForm.expire           = res.data['Data'].Expire
-             this.editForm.bk_base          = res.data['Data'].BkBase
-             this.editForm.script_path      = res.data['Data'].ScriptPath
-             this.editForm.script_file      = res.data['Data'].ScriptFile
-             this.editForm.bk_cmd           = res.data['Data'].BkCmd
-             this.editForm.run_time         = res.data['Data'].RunTime
-             this.editForm.comments         = res.data['Data'].Comments
-             this.editForm.backup_databases = res.data['Data'].BackupDatabases
-             this.editForm.api_server       = res.data['Data'].ApiServer
-             this.editForm.status           = res.data['Data'].Status
+             this.editForm.id                = res.data['Data'].Id
+             this.editForm.server_id         = res.data['Data'].ServerId
+             this.editForm.sour_db_id        = res.data['Data'].SourDbId
+             this.editForm.dest_db_id        = res.data['Data'].DestDbId
+             this.editForm.sync_tag          = res.data['Data'].SyncTag
+             this.editForm.sync_ywlx         = res.data['Data'].SyncYwlx
+             this.editForm.sync_type         = res.data['Data'].SyncType
+             this.editForm.script_path       = res.data['Data'].ScriptPath
+             this.editForm.script_file       = res.data['Data'].ScriptFile
+             this.editForm.run_time          = res.data['Data'].RunTime
+             this.editForm.comments          = res.data['Data'].Comments
+             this.editForm.sync_schema       = res.data['Data'].SyncSchema
+             this.editForm.sync_schema_dest  = res.data['Data'].SyncSchemaDest
+             this.editForm.sync_table        = res.data['Data'].SyncTable
+             this.editForm.batch_size        = res.data['Data'].BatchSize
+             this.editForm.batch_size_incr   = res.data['Data'].BatchSizeIncr
+             this.editForm.sync_gap          = res.data['Data'].SyncGap
+             this.editForm.sync_col_val      = res.data['Data'].SyncColVal
+             this.editForm.sync_col_name     = res.data['Data'].SyncColName
+             this.editForm.sync_time_type    = res.data['Data'].SyncTimeType
+             this.editForm.sync_repair_day   = res.data['Data'].SyncRepairDay
+             this.editForm.api_server        = res.data['Data'].ApiServer
+             this.editForm.status            = res.data['Data'].Status
           }
         }).catch((error) => {
           console.log('error=',error);
@@ -395,7 +481,7 @@
             if (res.data['Code'] == 200 ) {
               this.$notify({
                 title: '成功',
-                message: '用户['+row.server_desc+']删除成功',
+                message: '用户['+row.comments+']删除成功',
                 position: 'top-right',
                 type: 'success'
               });
@@ -423,17 +509,25 @@
       },
     },
     mounted: function() {
+      window.onresize = () => {
+        return (() => {
+          this.setDialogWidth()
+        })()
+      }
+
       this.querySync();
       this.queryForm.dm_market_id=utils.get_dm('05')
       this.queryForm.dm_sync_ywlx= utils.get_dm('08')
       this.queryForm.dm_sync_type=utils.get_dm('09')
 
-
       //editForm init
-      // this.editForm.dm_server_id = utils.get_backup_server();
-      // this.editForm.dm_db_id = utils.get_ds_server();
-      // this.editForm.dm_db_type= utils.get_dm('02')
-      // this.queryBackup();
+      this.editForm.dm_server_id = utils.get_sync_server();
+      this.editForm.dm_db_id = utils.get_ds_server();
+      this.editForm.dm_sync_ywlx= utils.get_dm('08')
+      this.editForm.dm_sync_type=utils.get_dm('09')
+      this.editForm.dm_sync_time_type=utils.get_dm('10')
+
+      this.querySync();
     }
   }
 

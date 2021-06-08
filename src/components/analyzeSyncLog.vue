@@ -2,29 +2,29 @@
   <el-form label-width="120px" >
     <el-form-item label=""> </el-form-item>
     <el-row type="flex">
-        <el-col :span="4">
-            <el-form-item label="数据库环境">
-                <el-select v-model="queryForm.db_env" placeholder="请选择数据库环境" @change="dbEnvClick" style="width:100%">
-                    <el-option v-for="dm in queryForm.dm_db_env"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm" ></el-option>
+        <el-col :span="5">
+            <el-form-item label="项目名称">
+                <el-select v-model="queryForm.market_id" placeholder="请选择项目名称" @change="dbMarketClick" style="width:100%">
+                    <el-option v-for="dm in queryForm.dm_market_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm" ></el-option>
+                </el-select>
+            </el-form-item>
+        </el-col>
+        <el-col :span="5">
+            <el-form-item label="同步任务">
+                <el-select v-model="queryForm.sync_tag" placeholder="请选择同步任务" style="width:100%">
+                    <el-option v-for="dm in queryForm.dm_sync_tag"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
                 </el-select>
             </el-form-item>
         </el-col>
         <el-col :span="4">
-            <el-form-item label="数据库类型">
-                <el-select v-model="queryForm.db_type" placeholder="请选择数据库类型" @change="dbTypeClick" style="width:100%">
-                    <el-option v-for="dm in queryForm.dm_db_type"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
-                </el-select>
-            </el-form-item>
-        </el-col>
-        <el-col :span="4">
-            <el-form-item label="备份任务">
-                <el-select v-model="queryForm.db_tag" placeholder="请选择备份任务" style="width:100%">
-                    <el-option v-for="dm in queryForm.dm_db_tag"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
+            <el-form-item label="业务类型">
+                <el-select v-model="queryForm.db_type" placeholder="请选择业务类型" style="width:100%">
+                    <el-option v-for="dm in queryForm.dm_sync_ywlx"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
                 </el-select>
             </el-form-item>
         </el-col>
         <el-col :span="8">
-            <el-form-item label="备份日期">
+            <el-form-item label="同步日期">
                 <el-date-picker
                         v-model="queryForm.beginDate"
                         style="width:180px"
@@ -43,9 +43,7 @@
             </el-form-item>
         </el-col>
         <el-col :span="2">
-            <el-form-item >
-               <el-button type="primary" @click="queryBackupLog">查询</el-button>
-            </el-form-item>
+             <el-button type="primary" @click="AnalyzeSyncLog">查询</el-button>
         </el-col>
 
     </el-row>
@@ -56,9 +54,6 @@
     <el-col :span="24">
           <div id='myChart2' class="block" :style="{width: '100%', height: '300px'}"></div>
     </el-col>
-    <el-col :span="24">
-          <div id='myChart3' class="block" :style="{width: '100%', height: '300px'}"></div>
-     </el-col>
   </el-form>
 </template>
 
@@ -69,12 +64,12 @@
     data() {
         return {
             queryForm:{
-                db_tag:'',
-                db_env:'',
-                db_type:'',
-                dm_db_tag:[],
-                dm_db_type:[],
-                dm_db_env:[],
+                sync_tag:'',
+                sync_ywlx:'',
+                market_id:'',
+                dm_sync_tag:[],
+                dm_market_id:[],
+                dm_sync_ywlx:[],
                 beginDate:'',
                 endDate:'',
             },
@@ -83,11 +78,8 @@
     },
 
     methods:{
-       dbEnvClick:function() {
-          this.queryForm.dm_db_tag=utils.get_backup_tasks( this.queryForm.db_env, this.queryForm.db_type)
-       },
-       dbTypeClick:function() {
-            this.queryForm.dm_db_tag=utils.get_backup_tasks( this.queryForm.db_env, this.queryForm.db_type)
+       dbMarketClick:function() {
+          this.queryForm.dm_sync_tag=utils.get_sync_tasks( this.queryForm.market_id)
        },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -99,19 +91,18 @@
         this.currentPage = val;
       },
       changeValue: function() {
-        this.queryBackupLog()
+        this.AnalyzeSyncLog()
       },
       openDetail:function(index,row){
         console.log('openDetail=',index,row)
       },
-      queryBackupLog() {
+      AnalyzeSyncLog() {
         this.axios({
             method: 'get',
-            url: utils.stringFormat("http://{0}:{1}/backup/log",[this.svr['server_ip'], this.svr['server_port']]),
+            url: utils.stringFormat("http://{0}:{1}/sync/log",[this.svr['server_ip'], this.svr['server_port']]),
             params: {
-                db_tag     : this.queryForm.db_tag,
-                db_env     : this.queryForm.db_env,
-                db_type    : this.queryForm.db_type,
+                sync_tag   : this.queryForm.sync_tag,
+                market_id  : this.queryForm.market_id,
                 begin_date : this.queryForm.beginDate,
                 end_date   : this.queryForm.endDate,
             },
@@ -120,18 +111,15 @@
             if (res.data['Code'] == 200 ) {
                 this.tableData =res.data['Data']
                 let createDate = []
-                let totalSize=[]
-                let backupTime=[]
-                let gzipTime=[]
+                let syncTime=[]
+                let syncAmount=[]
                 for (let i=0;i<this.tableData.length;i++) {
                     createDate[i] = this.tableData[i].create_date;
-                    backupTime[i] = this.tableData[i].elapsed_backup;
-                    gzipTime[i]   = this.tableData[i].elapsed_gzip;
-                    totalSize[i]  = this.tableData[i].total_size;
+                    syncTime[i]   = this.tableData[i].duration;
+                    syncAmount[i] = this.tableData[i].amount;
                 }
-                this.$chart.LineImage('myChart1','备份时长(s)',createDate,backupTime);
-                this.$chart.LineImage('myChart2','压缩时长(s)',createDate,gzipTime);
-                this.$chart.BarImage('myChart3','备份大小(mb)',createDate,totalSize);
+                this.$chart.LineImage('myChart1','同步时长',createDate,syncTime);
+                this.$chart.LineImage('myChart2','同步记录',createDate,syncAmount);
             }
         }).catch((error) => {
             console.log('error=',error);
@@ -139,10 +127,9 @@
       },
     },
     mounted: function() {
-      this.queryForm.dm_market_id=''
-      this.queryForm.dm_db_type= utils.get_dm('02')
-      this.queryForm.dm_db_env=utils.get_dm('03')
-      this.queryForm.dm_db_tag=utils.get_backup_tasks( this.queryForm.db_env, this.queryForm.db_type)
+      this.queryForm.dm_market_id=utils.get_dm('05')
+      this.queryForm.dm_sync_ywlx= utils.get_dm('08')
+      this.queryForm.dm_sync_tag=utils.get_sync_tasks( this.queryForm.market_id)
       this.queryForm.beginDate=utils.getBeforeDate(7)
       this.queryForm.endDate=utils.getBeforeDate("0")
     }

@@ -3,8 +3,8 @@
     <el-form-item label=""> </el-form-item>
     <el-row type="flex">
         <el-col :span="4">
-            <el-form-item label="任务描述">
-                <el-input placeholder="请输入标签名" v-model="queryForm.db_desc" @input="changeValue" style="width:100%"></el-input>
+            <el-form-item label="备份标识">
+                <el-input placeholder="请输入标签名" v-model="queryForm.db_tag" @input="changeValue" style="width:100%"></el-input>
             </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -25,6 +25,9 @@
             <el-form-item label="备份日期">
                 <el-date-picker
                         v-model="queryForm.beginDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                         style="width:180px"
                         range-separator="至"
                         start-placeholder="开始日期"
@@ -34,6 +37,9 @@
                 <el-date-picker
                         style="width:180px"
                         v-model="queryForm.endDate"
+                        type="date"
+                        value-format="yyyy-MM-dd"
+                        format="yyyy-MM-dd"
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期">
@@ -123,6 +129,59 @@
                 :total="tableData.length">
         </el-pagination>
     </div>
+    <el-dialog :title="dialogFormTitle" :visible.sync="dialogFormVisible" :width="dialogWidth">
+          <el-table
+                  :data="tableDataDetail.slice((currentPageDetail-1)*pageSizeDetail,currentPageDetail*pageSizeDetail)"
+                  :header-cell-style="{'text-align':'center'}"
+                  :cell-style="{'text-align':'left'}"
+                  border
+                  style="width: 100%"
+                  :default-sort="{prop: 'id', order: 'descending'}" >
+              <el-table-column
+                      prop="db_tag"
+                      label="标签名" >
+              </el-table-column>
+              <el-table-column
+                      prop="db_name"
+                      label="数据库名" >
+              </el-table-column>
+              <el-table-column
+                      prop="file_name"
+                      label="文件名"
+                      >
+              </el-table-column>
+              <el-table-column
+                      prop="create_date"
+                      label="备份日期"
+                      width="100">
+              </el-table-column>
+              <el-table-column
+                      prop="db_size"
+                      label="备份大小"
+                      width="100">
+              </el-table-column>
+              <el-table-column
+                      prop="elapsed_backup"
+                      label="备份耗时"
+                      width="100">
+              </el-table-column>
+          </el-table>
+          <div class="block" style="margin-top:15px;">
+            <el-pagination
+                    align='center'
+                    @size-change="handleSizeChangeDetail"
+                    @current-change="handleCurrentChangeDetail"
+                    :current-page="currentPageDetail"
+                    :page-sizes="[1,5,10,20]"
+                    :page-size="pageSizeDetail" layout="total, sizes, prev, pager, next, jumper"
+                    :total="tableDataDetail.length">
+            </el-pagination>
+        </div>
+
+          <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">关 闭</el-button>
+          </div>
+      </el-dialog>
   </el-form>
 </template>
 
@@ -133,8 +192,12 @@
   export default {
     data() {
         return {
+            dialogWidth: "1200px",
+            dialogFormVisible : false,
+            dialogTypeFlag:'',
+            dialogFormTitle : '',
             queryForm:{
-                db_desc:'',
+                db_tag:'',
                 db_env:'',
                 db_type:'',
                 dm_db_type:[],
@@ -147,6 +210,12 @@
             currentPage: 1, // 当前页码
             total: 20,      // 总条数
             pageSize: 10,   // 每页的数据条数,
+
+            tableDataDetail: [],
+            currentPageDetail: 1, // 当前页码
+            totalDetail: 20,      // 总条数
+            pageSizeDetail: 10,   // 每页的数据条数,
+
         };
     },
     methods:{
@@ -159,18 +228,32 @@
         console.log(`当前页: ${val}`);
         this.currentPage = val;
       },
+      handleSizeChangeDetail(val) {
+        console.log(`每页 ${val} 条`);
+        this.currentPageDetail = 1;
+        this.pageSizeDetail = val;
+      },
+      handleCurrentChangeDetail(val) {
+        console.log(`当前页: ${val}`);
+        this.currentPageDetail = val;
+      },
       changeValue: function() {
         this.queryBackupLog()
       },
       openDetail:function(index,row){
-        console.log('openDetail=',index,row)
+            this.dialogFormVisible = true
+            this.dialogFormTitle = '备份详情-'+row.comments.split('[')[0]
+            this.itemReadOnly = true
+            this.itemShow = true
+            this.dialogTypeFlag = 'detail'
+            this.queryBackupLogDetail(row.db_tag,row.create_date)
       },
       queryBackupLog() {
         this.axios({
           method: 'get',
           url: utils.stringFormat("http://{0}:{1}/backup/log",[this.svr['server_ip'], this.svr['server_port']]),
           params: {
-              db_desc    : this.queryForm.db_desc,
+              db_tag    : this.queryForm.db_tag,
               db_env     : this.queryForm.db_env,
               db_type    : this.queryForm.db_type,
               begin_date : this.queryForm.beginDate,
@@ -179,12 +262,37 @@
           timeout: 10000,
         }).then((res) => {
           if (res.data['Code'] == 200 ) {
-            this.tableData =res.data['Data']
+              if (res.data['Data'] != null) {
+                  this.tableData =res.data['Data']
+              } else {
+                  this.tableData =[]
+              }
           }
         }).catch((error) => {
           console.log('error=',error);
         });
       },
+      queryBackupLogDetail(p_syncTag,p_createnDate) {
+            this.axios({
+                method: 'get',
+                url: utils.stringFormat("http://{0}:{1}/backup/log/detail",[this.svr['server_ip'], this.svr['server_port']]),
+                params: {
+                    db_tag : p_syncTag,
+                    create_date : p_createnDate,
+                },
+                timeout: 10000,
+            }).then((res) => {
+                if (res.data['Code'] == 200 ) {
+                    if (res.data['Data'] != null) {
+                        this.tableDataDetail =res.data['Data']
+                    } else {
+                        this.tableDataDetail =[]
+                    }
+                }
+            }).catch((error) => {
+                console.log('error=',error);
+            });
+        },
     },
     mounted: function() {
       this.queryBackupLog();

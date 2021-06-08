@@ -45,7 +45,6 @@
           </el-form-item>
         </el-col>
     </el-row>
-
     <el-row>
       <el-col :span="8">
         <el-form-item label="同步主目录">
@@ -63,7 +62,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-
     <el-row>
       <el-col :span="8">
         <el-form-item label="任务描述">
@@ -81,7 +79,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-
     <el-row>
       <el-col :span="8">
         <el-form-item label="同步表列表">
@@ -99,7 +96,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-
     <el-row>
       <el-col :span="8">
         <el-form-item label="同步间隔">
@@ -117,7 +113,6 @@
         </el-form-item>
       </el-col>
     </el-row>
-
     <el-row>
       <el-col :span="8">
           <el-form-item label="时间类型">
@@ -147,6 +142,7 @@
         </el-form-item>
       </el-col>
     </el-row>
+
     <el-form-item label=""> </el-form-item>
     <el-row type="flex">
       <el-col :span="24"  style="text-align: center">

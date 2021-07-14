@@ -3,7 +3,7 @@
         <div class="wrap" id="wrap">
             <div class="logGet">
                 <div class="logD logDtip">
-                    <p class="p1">登 录</p>
+                    <p class="p1">登 录 <span style="font-size: 15px"> EaseBase2.0 <i class="ion-coffee"></i></span></p>
                 </div>
                 <div class="lgD">
                   <el-form-item  prop="username">
@@ -19,22 +19,21 @@
                         </el-input>
                   </el-form-item>
                 </div>
-
                 <div class="lgD">
                     <el-form-item prop="input_verification">
                         <el-input   placeholder="请输入验证码"  v-model="ruleForm.input_verification">
                             <template slot="prepend"><i class="ion-ios7-pulse-strong"></i></template>
-                            <template slot="append">{{ruleForm.show_verification}}</template>
+                            <template slot="append"><span :style="ruleForm.verification_color">{{ruleForm.show_verification}}</span></template>
                         </el-input>
-                        <i class="ion-refresh"  @click="createCode"></i>
                     </el-form-item>
-
                 </div>
-
                 <el-form-item>
                     <div class="logC">
                         <a><button @click="login('ruleForm')">登 录</button></a>
                     </div>
+                </el-form-item>
+                <el-form-item>
+                    <particles></particles>
                 </el-form-item>
 
             </div>
@@ -44,27 +43,52 @@
 
 </template>
 
+
 <script>
   import config from '@/utils/config.js';
   import utils from '@/utils/common.js'
   import axios from "axios";
+  import Particles from '@/components/particles/index';
 
   export default {
+      components: {
+          Particles
+      },
       data() {
           let validateCode = (rule, value, callback) => {
               if (value.toLowerCase() !== this.ruleForm.show_verification.toLowerCase()) {
+                  this.ruleForm.verification_color.color='#909399'
                   callback(new Error("验证码有误!"));
               } else {
                   callback();
               }
-           };
+          };
+
+          let validateCode2 = (rule, value, callback) => {
+              if (value.length == this.ruleForm.show_verification.length) {
+                  if (value.toLowerCase() !== this.ruleForm.show_verification.toLowerCase()) {
+                      callback(new Error("验证码有误!"));
+                      setTimeout(this.createCode,500);
+                  } else {
+                      this.ruleForm.verification_color.color='blue'
+                      setTimeout(callback(),500);
+
+                  }
+              } else {
+                  this.ruleForm.verification_color.color='#909399'
+                  callback(new Error("验证码有误!"));
+              }
+          };
           return {
               svr: config(),
               ruleForm:{
                   username: '',
                   password: '',
                   input_verification:'',
-                  show_verification:''
+                  show_verification:'',
+                  verification_color:{
+                      color:''
+                  }
               },
               rules: {
                   username: [
@@ -76,7 +100,8 @@
                   ],
                   input_verification: [
                       { required: true, message: '请输入验证码', trigger: 'change' },
-                      { validator: validateCode, message: '验证码有误',trigger: "blur" }
+                      { validator: validateCode, message: '验证码有误',trigger: "blur" },
+                      { validator: validateCode2, message: '验证码有误',trigger: "change" }
                   ]
               }
           };
@@ -100,7 +125,7 @@
                               console.log('login=>res=',res)
                               if (res.data['Code'] == 200 ) {
                                   localStorage.setItem('Authorization',res.data['Data'])
-                                  this.$router.replace('/index');
+                                  this.$router.push('/index');
                               }
                           }).catch((error) => {
                               console.log('error=',error);
@@ -127,9 +152,9 @@
   }
 </script>
 
-<style scoped>
+<style >
     body {
-        background-image: url('../assets/logon2.jpg');
+        /*background-image: url('../assets/logon2.jpg');*/
         background-size: 100%;
         width:100%;
         height:100%;
@@ -143,23 +168,14 @@
     }
 
     #wrap {
-        height: 650px;
+        height: 600px;
         width: 100%;
         background-position: center center;
         position: relative;
 
     }
-
-    #head {
-        height: 120px;
-        width: 100%;
-        background-color: #66CCCC;
-        text-align: center;
-        position: relative;
-    }
-
     #wrap .logGet {
-        height: 408px;
+        height: 428px;
         width: 368px;
         position: absolute;
         background-color: #FFFFFF;
@@ -179,15 +195,16 @@
     .logGet .logD.logDtip .p1 {
         display: inline-block;
         font-size: 28px;
-        margin-top: 30px;
+        margin-top: 35px;
+        margin-bottom:5px;
         width: 86%;
     }
 
     #wrap .logGet .logD.logDtip {
         width: 86%;
         border-bottom: 1px solid #ee7700;
-        margin-bottom: 60px;
-        margin-top: 0px;
+        margin-bottom: 40px;
+        margin-top: 5px;
         margin-right: auto;
         margin-left: auto;
     }
@@ -219,62 +236,6 @@
         margin-right: auto;
         margin-bottom: 0px;
         margin-left: auto;
-    }
-
-    .title {
-        font-family: "宋体";
-        color: #FFFFFF;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        /* 使用css3的transform来实现 */
-        font-size: 36px;
-        height: 40px;
-        width: 30%;
-    }
-
-    .copyright {
-        font-family: "宋体";
-        color: #FFFFFF;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        /* 使用css3的transform来实现 */
-        height: 60px;
-        width: 40%;
-        text-align: center;
-    }
-
-
-    .yanzhengma_input{
-        font-family: 'Exo 2', sans-serif;
-        border: 1px solid #fff;
-        color: #fff;
-        outline: none;
-        border-radius: 12px;
-        letter-spacing: 1px;
-        font-size: 17px;
-        font-weight: normal;
-        background-color: rgba(82, 56, 76, 0.15);
-        padding: 5px 0 5px 10px;
-        margin-left: 30px;
-        height: 30px;
-        margin-top: 25px;
-        border: 1px solid #e6e6e6;
-    }
-    .verification{
-        border-radius: 12px;
-        width:100px;
-        letter-spacing:5px;
-        margin-left: 50px;
-        height: 40px;
-        transform: translate(-15px,0);
-    }
-    .captcha{
-        height: 50px;
-        text-align: justify;
     }
 
 </style>

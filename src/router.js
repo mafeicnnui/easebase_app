@@ -54,60 +54,51 @@ const routes=[
         name:'index',
         component:Index,
         children:[
+            // default router
+            { path:'',component:queryUser},
+
             // user router
-            {
-                path:'',
-                component:changeUser
-            },
-            {
-                path:'/user_add',
-                component:addUser
-            },
-            {
-                path:'/user_query',
-                component:queryUser
-            },
-            {
-                path:'/user_change',
-                component:changeUser
-            },
+            { path:'/user_add',component:addUser},
+            { path:"/user_query",component:queryUser},
+            { path:"/user_change",component:changeUser},
+
+            // role router
+            { path:'/role_add',component:addRole},
+            { path:"/role_query",component:queryRole},
+            { path:"/role_change",component:changeRole},
+
+            // menu router
+            { path:'/menu_add',component:addMenu},
+            { path:"/menu_query",component:queryMenu},
+            { path:"/menu_change",component:changeMenu},
+
+            // db source router
+            { path:'/ds_add',component:addDs},
+            { path:"/ds_query",component:queryDs},
+            { path:"/ds_change",component:changeDs},
+
+            // server router
+            { path:'/server_add',component:addServer},
+            { path:"/server_query",component:queryServer},
+            { path:"/server_change",component:changeServer},
+
+            // backup router
+            { path:'/backup_add',component:addBackup},
+            { path:"/backup_query",component:queryBackup},
+            { path:"/backup_change",component:changeBackup},
+            { path:"/backup_log_query",component:queryBackupLog},
+            { path:"/backup_log_analyze",component:analyzeBackupLog},
+
+            // sync router
+            { path:'/sync_add',component:addSync},
+            { path:"/sync_query",component:querySync},
+            { path:"/sync_change",component:changeSync},
+            { path:"/sync_log_query",component:querySyncLog},
+            { path:"/sync_log_analyze",component:analyzeSyncLog},
         ]
 
     },
 
-    // menu router
-    { path:'/menu_add',component:addMenu},
-    { path:"/menu_query",component:queryMenu},
-    { path:"/menu_change",component:changeMenu},
-
-    // role router
-    { path:'/role_add',component:addRole},
-    { path:"/role_query",component:queryRole},
-    { path:"/role_change",component:changeRole},
-
-    // db source router
-    { path:'/ds_add',component:addDs},
-    { path:"/ds_query",component:queryDs},
-    { path:"/ds_change",component:changeDs},
-
-    // server router
-    { path:'/server_add',component:addServer},
-    { path:"/server_query",component:queryServer},
-    { path:"/server_change",component:changeServer},
-
-    // backup router
-    { path:'/backup_add',component:addBackup},
-    { path:"/backup_query",component:queryBackup},
-    { path:"/backup_change",component:changeBackup},
-    { path:"/backup_log_query",component:queryBackupLog},
-    { path:"/backup_log_analyze",component:analyzeBackupLog},
-
-    // sync router
-    { path:'/sync_add',component:addSync},
-    { path:"/sync_query",component:querySync},
-    { path:"/sync_change",component:changeSync},
-    { path:"/sync_log_query",component:querySyncLog},
-    { path:"/sync_log_analyze",component:analyzeSyncLog},
 
     // default router
     { path:'',component:queryUser},
@@ -122,19 +113,19 @@ const router=new VueRouter({
 
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-router.beforeEach((to, from, next) => {
-    if (to.path === '/login') {
-        next();
-    } else {
-        let token = localStorage.getItem('Authorization');
-
-        if (token === null || token === '') {
-            next('/login');
-        } else {
-            next();
-        }
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     if (to.path === '/login') {
+//         next();
+//     } else {
+//         let token = localStorage.getItem('Authorization');
+//
+//         if (token === null || token === '') {
+//             next('/login');
+//         } else {
+//             next();
+//         }
+//     }
+// });
 
 //抛出这个这个实例对象方便外部读取以及访问
 export default router

@@ -61,6 +61,9 @@ export  function get_dm(p_dm) {
         //url: "http://10.16.47.114:9000/dm",
         url: stringFormat("http://{0}:{1}/dm",[cfg.server_ip, cfg.server_port]),
         type: "post",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         data:{
@@ -78,6 +81,9 @@ export  function get_backup_server() {
     $.ajax({
         url: stringFormat("http://{0}:{1}/backup/server",[cfg.server_ip, cfg.server_port]),
         type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         success: function (res) {
@@ -92,6 +98,9 @@ export  function get_sync_server() {
     $.ajax({
         url: stringFormat("http://{0}:{1}/sync/server",[cfg.server_ip, cfg.server_port]),
         type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         success: function (res) {
@@ -106,6 +115,9 @@ export  function get_ds_server() {
     $.ajax({
         url: stringFormat("http://{0}:{1}/ds/server",[cfg.server_ip, cfg.server_port]),
         type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         success: function (res) {
@@ -120,6 +132,9 @@ export  function get_backup_tasks(p_db_env,p_db_type) {
     $.ajax({
         url: stringFormat("http://{0}:{1}/backup/task",[cfg.server_ip, cfg.server_port]),
         type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         data:{
@@ -138,6 +153,9 @@ export  function get_sync_tasks(p_market_id) {
     $.ajax({
         url: stringFormat("http://{0}:{1}/sync/task",[cfg.server_ip, cfg.server_port]),
         type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         data:{

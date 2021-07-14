@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-      <userTree/>
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
-import userTree from './components/userTree.vue'
 
 export default {
-  name: 'App',
-  components: {
-    userTree
-  }
+
 }
 </script>
 
@@ -26,6 +22,5 @@ export default {
     body {
         margin:0px;
     }
-
 
 </style>

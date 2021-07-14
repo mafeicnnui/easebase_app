@@ -48,13 +48,13 @@
     </el-row>
     <br>
     <el-col :span="24">
-          <div id='myChart1' class="block" :style="{width: '100%', height: '300px'}"></div>
+          <div id='myChart1' v-show="show" class="block" :style="{width: '100%', height: '300px'}"></div>
     </el-col>
     <el-col :span="24">
-          <div id='myChart2' class="block" :style="{width: '100%', height: '300px'}"></div>
+          <div id='myChart2' v-show="show" class="block" :style="{width: '100%', height: '300px'}"></div>
     </el-col>
     <el-col :span="24">
-          <div id='myChart3' class="block" :style="{width: '100%', height: '300px'}"></div>
+          <div id='myChart3' v-show="show" class="block" :style="{width: '100%', height: '300px'}"></div>
      </el-col>
   </el-form>
 </template>
@@ -76,6 +76,7 @@
                 endDate:'',
             },
             svr:config(),
+            show:true
         };
     },
 
@@ -115,20 +116,28 @@
             timeout: 10000,
         }).then((res) => {
             if (res.data['Code'] == 200 ) {
-                this.tableData =res.data['Data']
-                let createDate = []
-                let totalSize=[]
-                let backupTime=[]
-                let gzipTime=[]
-                for (let i=0;i<this.tableData.length;i++) {
-                    createDate[i] = this.tableData[i].create_date;
-                    backupTime[i] = this.tableData[i].elapsed_backup;
-                    gzipTime[i]   = this.tableData[i].elapsed_gzip;
-                    totalSize[i]  = this.tableData[i].total_size;
+                if (res.data['Data'] != null) {
+                    this.tableData =res.data['Data']
+                    let createDate = []
+                    let totalSize=[]
+                    let backupTime=[]
+                    let gzipTime=[]
+                    let unit=''
+                    for (let i=0;i<this.tableData.length;i++) {
+                        createDate[i] = this.tableData[i].create_date;
+                        backupTime[i] = this.tableData[i].elapsed_backup;
+                        gzipTime[i]   = this.tableData[i].elapsed_gzip;
+                        totalSize[i]  = this.tableData[i].total_size.substring(0,this.tableData[i].total_size.length-1);
+                        unit = this.tableData[i].total_size.charAt(this.tableData[i].total_size.length-1);
+                    }
+                    this.$chart.LineImage('myChart1','备份时长(s)',createDate,backupTime);
+                    this.$chart.LineImage('myChart2','压缩时长(s)',createDate,gzipTime);
+                    this.$chart.BarImage('myChart3','备份大小('+unit+')',createDate,totalSize);
+                    this.show=true
+                } else {
+                    this.tableData =[]
+                    this.show=false
                 }
-                this.$chart.LineImage('myChart1','备份时长(s)',createDate,backupTime);
-                this.$chart.LineImage('myChart2','压缩时长(s)',createDate,gzipTime);
-                this.$chart.BarImage('myChart3','备份大小(mb)',createDate,totalSize);
             }
         }).catch((error) => {
             console.log('error=',error);

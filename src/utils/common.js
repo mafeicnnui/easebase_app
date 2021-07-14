@@ -42,6 +42,9 @@ export  function get_tree() {
     $.ajax({
         url: stringFormat("http://{0}:{1}/tree2",[cfg.server_ip, cfg.server_port]),
         type: "post",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
         datatype: "json",
         async:false,
         data:{},
@@ -168,7 +171,6 @@ export function getBeforeDate(n) {
     return s;
 }
 
-
 export default {
     formatDate,
     stringFormat,
@@ -179,6 +181,6 @@ export default {
     get_ds_server,
     get_backup_tasks,
     get_sync_tasks,
-    getBeforeDate
+    getBeforeDate,
 
 };

@@ -11,6 +11,17 @@ const install = function(Vue) {
                         this.chart = echarts.init(document.getElementById(id),'macarons');
                         this.chart.clear();
                         const optionData = {
+                            tooltip: {
+                                trigger: 'axis',
+                                padding: [8, 10, 8, 10],
+                                axisPointer: {
+                                    type: 'line',
+                                    lineStyle: {
+                                        color: 'rgba(231,211,211,0.65)'
+                                    },
+                                },
+                                backgroundColor: 'transparent',
+                            },
                             title: {
                                 text: title,
                                 top: '15',
@@ -53,6 +64,18 @@ const install = function(Vue) {
                         this.chart = echarts.init(document.getElementById(id),'macarons');
                         this.chart.clear();
                         const optionData = {
+                            tooltip: {
+                                show:true,
+                                trigger: 'axis',
+                                padding: [8, 10, 8, 10],
+                                axisPointer: {
+                                    type: 'line',
+                                    lineStyle: {
+                                        color: 'rgba(0, 0, 0, 0.65)'
+                                    },
+                                },
+                                backgroundColor: 'transparent',
+                            },
                             title: {
                                 text: title,
                                 top: '15',

@@ -139,12 +139,18 @@
           if (res.data['Code'] == 200 ) {
             let newArr = res.data['Data'];
             for (let i=0;i<newArr.length;i++)  {
-              newArr[i]['ExpireDate'] = newArr[i]['ExpireDate'].substr(0,10)
+                newArr[i]['ExpireDate'] = newArr[i]['ExpireDate'].substr(0,10)
             }
             this.tableData = newArr
           }
         }).catch((error) => {
-          console.log('error=',error);
+            if (error.response.status === 401) {
+                this.$message.error('无权访问!');
+                this.$router.replace('/login');
+            } else if  (error.response.status === 402) {
+                this.$message.error('认证过期!');
+                this.$router.replace('/login');
+            }
         });
       },
     },

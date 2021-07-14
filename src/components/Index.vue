@@ -43,8 +43,6 @@
 </template>
 
 <script>
-    import ajax from 'axios'
-    import $ from 'jquery'
     import config from "@/utils/config";
     import utils from "@/utils/common";
 
@@ -65,28 +63,6 @@
             this.nav = utils.get_tree();
         },
         methods:{
-            loadTree() {
-                ajax.post(utils.stringFormat("http://{0}:{1}/tree2",[this.svr['server_ip'], this.svr['server_port']])
-                ).then((res) => {
-                    this.nav = res.data['Data']
-                }).catch((error) => {
-                    console.log('error=',error);
-                });
-            },
-           get_tree() {
-                let result ;
-                $.ajax({
-                    url: utils.stringFormat("http://{0}:{1}/tree2",[this.svr['server_ip'], this.svr['server_port']]),
-                    type: "post",
-                    datatype: "json",
-                    async:false,
-                    data:{},
-                    success: function (res) {
-                        result =  res['Data']
-                    }
-                });
-                return result;
-            },
             addTab(item) {
                 let title = item.name
                 let name  = item.url
@@ -124,9 +100,11 @@
                 this.editableTabs = tabs.filter(tab => tab.name !== targetName);
             },
             handleClick(tab) {
+                console.log('handleClick=',tab)
                 this.$router.push({path: tab.name});
             },
             menuItemClick(item) {
+                console.log('menuItemClick=',item)
                 this.addTab(item);
             }
         }

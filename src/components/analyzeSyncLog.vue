@@ -49,10 +49,10 @@
     </el-row>
     <br>
     <el-col :span="24">
-          <div id='myChart1' class="block" :style="{width: '100%', height: '300px'}"></div>
+          <div id='myChart1' v-show="show" class="block" :style="{width: '100%', height: '300px'}"></div>
     </el-col>
     <el-col :span="24">
-          <div id='myChart2' class="block" :style="{width: '100%', height: '300px'}"></div>
+          <div id='myChart2' v-show="show"  class="block" :style="{width: '100%', height: '300px'}"></div>
     </el-col>
   </el-form>
 </template>
@@ -74,6 +74,7 @@
                 endDate:'',
             },
             svr:config(),
+            show:true
         };
     },
 
@@ -109,17 +110,24 @@
             timeout: 10000,
         }).then((res) => {
             if (res.data['Code'] == 200 ) {
-                this.tableData =res.data['Data']
-                let createDate = []
-                let syncTime=[]
-                let syncAmount=[]
-                for (let i=0;i<this.tableData.length;i++) {
-                    createDate[i] = this.tableData[i].create_date;
-                    syncTime[i]   = this.tableData[i].duration;
-                    syncAmount[i] = this.tableData[i].amount;
+                if (res.data['Data'] != null) {
+                    this.tableData =res.data['Data']
+                    let createDate = []
+                    let syncTime=[]
+                    let syncAmount=[]
+                    for (let i=0;i<this.tableData.length;i++) {
+                        createDate[i] = this.tableData[i].create_date;
+                        syncTime[i]   = this.tableData[i].duration;
+                        syncAmount[i] = this.tableData[i].amount;
+                    }
+                    this.$chart.LineImage('myChart1','同步时长',createDate,syncTime);
+                    this.$chart.LineImage('myChart2','同步记录',createDate,syncAmount);
+                    this.show=true
+                } else {
+                    this.tableData =[]
+                    this.show=false
                 }
-                this.$chart.LineImage('myChart1','同步时长',createDate,syncTime);
-                this.$chart.LineImage('myChart2','同步记录',createDate,syncAmount);
+
             }
         }).catch((error) => {
             console.log('error=',error);

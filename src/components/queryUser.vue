@@ -2,100 +2,106 @@
   <el-form label-width="120px" >
     <el-form-item label=""> </el-form-item>
     <el-row type="flex">
-      <el-col :span="10">
-        <el-form-item label="姓名" >
-          <el-input placeholder="请输入登陆名" v-model="user_name" @input="changeValue" style="width:400px"></el-input>
-          <pre>&nbsp;&nbsp;</pre>
-          <el-button type="primary" @click="queryUser">查询</el-button>
-        </el-form-item>
-      </el-col>
+        <el-col :span="12">
+          <el-form-item label="姓名" >
+            <el-input placeholder="请输入登陆名" v-model="user_name" @input="changeValue" style="width:400px"></el-input>
+            <pre>&nbsp;&nbsp;</pre>
+            <el-button type="primary" @click="queryUser">查询</el-button>
+          </el-form-item>
+        </el-col>
     </el-row>
-    <el-table
-            :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
-            :header-cell-style="{'text-align':'center'}"
-            :cell-style="{'text-align':'center'}"
-            border
-            style="width: 100%"
-            :default-sort="{prop: 'EmpNo', order: 'descending'}" >
-      <el-table-column
-              prop="EmpNo"
-              label="工号"
-              width="80">
-      </el-table-column>
-      <el-table-column
-              prop="Name"
-              label="姓名"
-              width="120">
-      </el-table-column>
-      <el-table-column
-              prop="LoginName"
-              label="用户名"
-              width="150">
-      </el-table-column>
-      <el-table-column
-              prop="Gender"
-              label="性别"
-              width="60">
-      </el-table-column>
-      <el-table-column
-              prop="Phone"
-              label="手机号"
-              width="120">
-      </el-table-column>
-      <el-table-column
-              prop="Email"
-              sortable
-              width="200"
-              label="电子邮箱">
-      </el-table-column>
-      <el-table-column
-              prop="DeptNo"
-              sortable
-              label="部门名"
-              width="120">
-      </el-table-column>
-      <el-table-column
-              prop="ExpireDate"
-              label="过期时间"
-              width="120">
-      </el-table-column>
-      <el-table-column
-              prop="Creator"
-              label="创建人"
-              width="100">
-      </el-table-column>
-      <el-table-column
-              prop="CreateDate"
-              label="创建时间"
-              width="180">
-      </el-table-column>
-      <el-table-column
-              prop="Updater"
-              label="更新人"
-              width="100">
-      </el-table-column>
-      <el-table-column
-              prop="LastUpdateDate"
-              label="最近更新时间"
-              width="180">
-      </el-table-column>
-      <el-table-column
-              prop="Status"
-              label="状态"
-              width="80">
-      </el-table-column>
-    </el-table>
-    <div class="block" style="margin-top:15px;">
-        <el-pagination
-                align='center'
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[1,5,10,20]"
-                :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
-                :total="tableData.length">
-        </el-pagination>
-    </div>
+    <el-row type="flex">
+       <el-table
+              :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+              :header-cell-style="{'text-align':'center'}"
+              :cell-style="{'text-align':'center'}"
+              border
+              style="width: 100%"
+              :default-sort="{prop: 'EmpNo', order: 'descending'}" >
+        <el-table-column
+                prop="EmpNo"
+                label="工号"
+                width="80">
+        </el-table-column>
+        <el-table-column
+                prop="Name"
+                label="姓名"
+                width="120">
+        </el-table-column>
+        <el-table-column
+                prop="LoginName"
+                label="用户名"
+                width="150">
+        </el-table-column>
+        <el-table-column
+                prop="Gender"
+                label="性别"
+                width="60">
+        </el-table-column>
+        <el-table-column
+                prop="Phone"
+                label="手机号"
+                width="120">
+        </el-table-column>
+        <el-table-column
+                prop="Email"
+                sortable
+                width="200"
+                label="电子邮箱">
+        </el-table-column>
+        <el-table-column
+                prop="DeptNo"
+                sortable
+                label="部门名"
+                width="120">
+        </el-table-column>
+        <el-table-column
+                prop="ExpireDate"
+                label="过期时间"
+                width="120">
+        </el-table-column>
+        <el-table-column
+                prop="Creator"
+                label="创建人"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="CreateDate"
+                label="创建时间"
+               >
+        </el-table-column>
+        <el-table-column
+                prop="Updater"
+                label="更新人"
+                width="100">
+        </el-table-column>
+        <el-table-column
+                prop="LastUpdateDate"
+                label="最近更新时间"
+                >
+        </el-table-column>
+        <el-table-column
+                prop="Status"
+                label="状态"
+                width="80">
+        </el-table-column>
+      </el-table>
+    </el-row>
+
+    <el-row type="flex">
+        <div class="block" style="margin-top:15px;">
+          <el-pagination
+                  align='center'
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :current-page="currentPage"
+                  :page-sizes="[1,5,10,20]"
+                  :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper"
+                  :total="tableData.length">
+          </el-pagination>
+        </div>
+    </el-row>
+
   </el-form>
 </template>
 

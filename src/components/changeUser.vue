@@ -2,12 +2,15 @@
   <el-form  label-width="120px">
     <el-form-item label=""> </el-form-item>
     <el-row type="flex">
-      <el-col :span="10">
-        <el-form-item label="姓名">
-          <el-input placeholder="请输入登陆名" v-model="user_name" @input="changeValue" style="width:400px"></el-input>
+      <el-col align="left" :span="12">
+        <el-form-item>
+          <span>姓名<pre>   </pre></span>
+          <el-input placeholder="请输入登陆名" v-model="user_name" @input="changeValue" style="width:300px"></el-input>
           <pre>&nbsp;&nbsp;</pre>
           <el-button type="primary" @click="queryUser">查询</el-button>
         </el-form-item>
+      </el-col>
+      <el-col :span="12">
       </el-col>
     </el-row>
     <el-table
@@ -56,6 +59,10 @@
               width="120">
       </el-table-column>
       <el-table-column
+              prop="CreateDate"
+              label="创建时间">
+      </el-table-column>
+      <el-table-column
               prop="ExpireDate"
               sortable
               label="过期时间"
@@ -65,12 +72,6 @@
               prop="Creator"
               label="创建人"
               width="100">
-      </el-table-column>
-      <el-table-column
-              prop="CreateDate"
-              sortable
-              label="创建时间"
-              width="180">
       </el-table-column>
       <el-table-column
               prop="Status"
@@ -440,5 +441,19 @@
 </script>
 
 <style scoped>
+  .el-form-item label:after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+  }
+
+  .el-form-item__label {
+    text-align: justify;
+    height: 50px;
+  }
+
+  .el-form-item.is-required .el-form-item__label:before {
+    content: none !important;
+  }
 
 </style>

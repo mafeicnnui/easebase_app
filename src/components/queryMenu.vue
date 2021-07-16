@@ -2,7 +2,7 @@
   <el-form  label-width="120px">
     <el-form-item label=""> </el-form-item>
     <el-row type="flex">
-      <el-col :span="10">
+      <el-col :span="12">
         <el-form-item label="菜单名">
           <el-input placeholder="请输入菜单 名" v-model="menu_name" @input="changeValue" style="width:400px"></el-input>
           <pre>&nbsp;&nbsp;</pre>

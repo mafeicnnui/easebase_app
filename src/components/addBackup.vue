@@ -4,14 +4,14 @@
     <el-row>
       <el-col :span="8">
         <el-form-item label="备份服务器">
-          <el-select v-model="form.server_id" placeholder="请选择备份服务器" style="width:250px;">
+          <el-select v-model="form.server_id" placeholder="请选择备份服务器" >
             <el-option v-for="dm in form.dm_server_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
           </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="8">
         <el-form-item label="数据库服务">
-          <el-select v-model="form.db_id" placeholder="请选择数据库服务" style="width:250px">
+          <el-select v-model="form.db_id" placeholder="请选择数据库服务">
             <el-option v-for="dm in form.dm_db_id"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
           </el-select>
         </el-form-item>
@@ -200,5 +200,7 @@
 </script>
 
 <style scoped>
-
+  .el-input,.el-select {
+    width:250px;
+  }
 </style>

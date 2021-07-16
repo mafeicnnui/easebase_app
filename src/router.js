@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 //引用组件
 import Login        from './components/Login'
-import Index         from '@/components/Index'
+import Index        from '@/components/Index'
 
 import addUser      from '@/components/addUser';
 import queryUser    from '@/components/queryUser';
@@ -29,17 +29,17 @@ import addServer    from "@/components/addServer";
 import queryServer  from "@/components/queryServer";
 import changeServer from '@/components/changeServer';
 
-import addBackup    from "@/components/addBackup";
-import queryBackup  from '@/components/queryBackup';
-import changeBackup from '@/components/changeBackup';
-import queryBackupLog  from '@/components/queryBackupLog';
+import addBackup        from "@/components/addBackup";
+import queryBackup      from '@/components/queryBackup';
+import changeBackup     from '@/components/changeBackup';
+import queryBackupLog   from '@/components/queryBackupLog';
 import analyzeBackupLog from "@/components/analyzeBackupLog";
 
-import addSync    from "@/components/addSync";
-import querySync  from '@/components/querySync';
-import changeSync from '@/components/changeSync';
-import querySyncLog  from '@/components/querySyncLog';
-import analyzeSyncLog from "@/components/analyzeSyncLog";
+import addSync         from "@/components/addSync";
+import querySync       from '@/components/querySync';
+import changeSync      from '@/components/changeSync';
+import querySyncLog    from '@/components/querySyncLog';
+import analyzeSyncLog  from "@/components/analyzeSyncLog";
 
 
 //定义routes路由的集合，数组类型
@@ -47,7 +47,7 @@ const routes=[
     //单个路由均为对象类型，path代表的是路径，component代表组件
 
     // home
-    { path:'/',redirect:'/Login'},
+    { path:'/',redirect:'/login'},
     { path:'/login',name:'login',component:Login},
     {
         path:'/index',
@@ -99,7 +99,6 @@ const routes=[
 
     },
 
-
     // default router
     { path:'',component:queryUser},
 
@@ -114,6 +113,7 @@ const router=new VueRouter({
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 // router.beforeEach((to, from, next) => {
+//     console.log('to.path=',to.path)
 //     if (to.path === '/login') {
 //         next();
 //     } else {

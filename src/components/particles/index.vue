@@ -7,7 +7,7 @@
 <script>
     /* eslint-disable */
     import particlesJs from "particles.js";
-    import particlesConfig from "./particles-1.json";
+    import particlesConfig from "./particles.json";
     export default {
         data() {
             return {};

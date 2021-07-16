@@ -189,6 +189,11 @@ export function getBeforeDate(n) {
     return s;
 }
 
+
+export function getWelcome() {
+
+}
+
 export default {
     formatDate,
     stringFormat,

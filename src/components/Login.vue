@@ -37,12 +37,16 @@
                 </el-form-item>
 
             </div>
+            <div class="logGet2 glare">
+                <h2 align="left">1、运维，让业务不再裸奔</h2>
+                <h2 align="left">2、运维无处不在，生活自由自在</h2>
+                <h2 align="left">3、互联网+时代，拼运营是表象，拼运维是本质</h2>
+                <h2 align="left">4、让运维人员在电脑前喝喝咖啡，才是好运维</h2>
+                <h2 align="left">5、让运维从负担转为生产力</h2>
+            </div>
         </div>
     </el-form>
-
-
 </template>
-
 
 <script>
   import config from '@/utils/config.js';
@@ -67,6 +71,7 @@
           let validateCode2 = (rule, value, callback) => {
               if (value.length == this.ruleForm.show_verification.length) {
                   if (value.toLowerCase() !== this.ruleForm.show_verification.toLowerCase()) {
+                      this.ruleForm.verification_color.color='red'
                       callback(new Error("验证码有误!"));
                       setTimeout(this.createCode,500);
                   } else {
@@ -113,19 +118,21 @@
           login:function(formName){
               this.$refs[formName].validate((valid) => {
                   if (valid) {
-                          axios({
-                              method: 'post',
-                              url: utils.stringFormat("http://{0}:{1}/login",[this.svr['server_ip'], this.svr['server_port']]),
-                              params: {
-                                  username  : this.ruleForm.username,
-                                  password  : this.ruleForm.password
-                              },
+                              axios({
+                                  method: 'post',
+                                  url: utils.stringFormat("http://{0}:{1}/login",[this.svr['server_ip'], this.svr['server_port']]),
+                                  params: {
+                                      username  : this.ruleForm.username,
+                                      password  : this.ruleForm.password
+                                  },
                               timeout: 10000,
                           }).then((res) => {
                               console.log('login=>res=',res)
                               if (res.data['Code'] == 200 ) {
                                   localStorage.setItem('Authorization',res.data['Data'])
                                   this.$router.push('/index');
+                              } else {
+                                  this.$router.push('/login');
                               }
                           }).catch((error) => {
                               console.log('error=',error);
@@ -153,38 +160,52 @@
 </script>
 
 <style >
-    body {
-        /*background-image: url('../assets/logon2.jpg');*/
-        background-size: 100%;
-        width:100%;
-        height:100%;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-    }
 
     #wrap {
         height: 600px;
         width: 100%;
         background-position: center center;
         position: relative;
+        /*border: 2px solid red;*/
 
     }
     #wrap .logGet {
         height: 428px;
-        width: 368px;
+        width : 368px;
         position: absolute;
         background-color: #FFFFFF;
         top: 100px;
         right: 15%;
+        /*border: 5px solid blue;*/
     }
 
+    .glare {
+        /* 设置渐变背景 */
+        background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.8) 50%,
+                rgba(255, 255, 255, 0) 55%,
+                rgba(255, 255, 255, 0) 100%
+        );
+        background-size: 200%;
+        /* 使用背景图动画 */
+        animation: glare 1s infinite;
+    }
+
+    #wrap .logGet2 {
+        height: 428px;
+        width : 568px;
+        position: absolute;
+        top: 200px;
+        left: 10%;
+        color: rgba(133, 137, 122, 0.85);
+
+    }
+
+
     .logC a button {
-        width: 100%;
+        width : 100%;
         height: 45px;
         background-color: #ee7700;
         border: none;
@@ -192,7 +213,7 @@
         font-size: 18px;
     }
 
-    .logGet .logD.logDtip .p1 {
+    .logGet .logD .p1 {
         display: inline-block;
         font-size: 28px;
         margin-top: 35px;
@@ -200,7 +221,7 @@
         width: 86%;
     }
 
-    #wrap .logGet .logD.logDtip {
+    #wrap .logGet .logD {
         width: 86%;
         border-bottom: 1px solid #ee7700;
         margin-bottom: 40px;

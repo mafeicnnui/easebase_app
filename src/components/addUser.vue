@@ -4,38 +4,38 @@
     <el-row type="flex">
       <el-col :span="12">
         <el-form-item label="姓名">
-          <el-input placeholder="请输入姓名" v-model="form.user_name" style="width:550px"></el-input>
+           <el-input placeholder="请输入姓名" v-model="form.user_name" ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="用户">
-          <el-input placeholder="请输入用户名" v-model="form.login_name" style="width:550px"></el-input>
+          <el-input placeholder="请输入用户名" v-model="form.login_name" ></el-input>
         </el-form-item>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="12">
         <el-form-item label="工号">
-          <el-input placeholder="请输入工号" v-model="form.emp_no" style="width:550px"></el-input>
+          <el-input placeholder="请输入工号" v-model="form.emp_no" ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="密码">
-          <el-input placeholder="请输入密码" v-model="form.password" show-password style="width:550px"></el-input>
+          <el-input placeholder="请输入密码" v-model="form.password" show-password></el-input>
         </el-form-item>
       </el-col>
     </el-row>
     <el-row>
       <el-col :span="12">
         <el-form-item label="性别">
-          <el-select v-model="form.gender" placeholder="请选择性别" style="width:550px">
+          <el-select v-model="form.gender" placeholder="请选择性别" >
             <el-option v-for="dm in form.dm_gender"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
           </el-select>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="部门">
-          <el-select v-model="form.dept_no" placeholder="请选择部门" style="width:550px">
+          <el-select v-model="form.dept_no" placeholder="请选择部门" >
             <el-option v-for="dm in form.dm_dept_no"  :key="dm.dmm" :label="dm.dmmc" :value="dm.dmm"></el-option>
           </el-select>
         </el-form-item>
@@ -44,12 +44,12 @@
     <el-row>
       <el-col :span="12">
         <el-form-item label="邮箱">
-          <el-input placeholder="请输入邮箱" v-model="form.email" style="width:550px"></el-input>
+          <el-input placeholder="请输入邮箱" v-model="form.email" ></el-input>
         </el-form-item>
       </el-col>
       <el-col :span="12">
         <el-form-item label="手机">
-          <el-input placeholder="请输入手机" v-model="form.phone" style="width:550px"></el-input>
+          <el-input placeholder="请输入手机" v-model="form.phone" ></el-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -67,7 +67,7 @@
       </el-col>
       <el-col :span="12">
         <el-form-item label="状态">
-          <el-select v-model="form.status"  style="width:550px">
+          <el-select v-model="form.status" >
             <el-option label="启用" value="1"></el-option>
             <el-option label="禁用" value="2"></el-option>
           </el-select>
@@ -77,7 +77,7 @@
     <el-row>
       <el-col :span="12">
         <el-form-item label="角色">
-          <el-select v-model="form.user_role" multiple placeholder="请选择角色"  style="width:550px">
+          <el-select v-model="form.user_role" multiple placeholder="请选择角色" >
             <el-option
                     v-for="item in form.sys_role"
                     :key="item.value"
@@ -218,5 +218,7 @@
 </script>
 
 <style scoped>
-
+  .el-input,.el-select,.el-date-picker {
+    width:550px;
+  }
 </style>

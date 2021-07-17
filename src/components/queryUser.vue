@@ -87,7 +87,6 @@
         </el-table-column>
       </el-table>
     </el-row>
-
     <el-row type="flex">
         <div class="block" style="margin-top:15px;">
           <el-pagination
@@ -101,7 +100,6 @@
           </el-pagination>
         </div>
     </el-row>
-
   </el-form>
 </template>
 
@@ -133,6 +131,24 @@
       changeValue: function() {
         this.queryUser()
       },
+      exceptions:function(error) {
+          console.log('error=',error)
+          if (error.response.status === 401) {
+              this.$alert('用户无权访问!', '提示', {
+                  confirmButtonText: '确定',
+                  callback: () => {
+                      this.$router.push('/login');
+                  }
+              });
+          } else if  (error.response.status === 402) {
+              this.$alert('用户认证已过期，请重新登陆!', '提示', {
+                  confirmButtonText: '确定',
+                  callback: ()=> {
+                      this.$router.push('/login');
+                  }
+              });
+          }
+      },
       queryUser() {
         axios({
           method: 'get',
@@ -150,13 +166,8 @@
             this.tableData = newArr
           }
         }).catch((error) => {
-            if (error.response.status === 401) {
-                this.$message.error('无权访问!');
-                this.$router.replace('/login');
-            } else if  (error.response.status === 402) {
-                this.$message.error('认证过期!');
-                this.$router.replace('/login');
-            }
+            console.log(error)
+            this.exceptions(error)
         });
       },
     },

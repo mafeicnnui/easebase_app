@@ -38,11 +38,14 @@
 
             </div>
             <div class="logGet2 glare">
-                <h2 align="left">1、运维，让业务不再裸奔</h2>
-                <h2 align="left">2、运维无处不在，生活自由自在</h2>
-                <h2 align="left">3、互联网+时代，拼运营是表象，拼运维是本质</h2>
-                <h2 align="left">4、让运维人员在电脑前喝喝咖啡，才是好运维</h2>
-                <h2 align="left">5、让运维从负担转为生产力</h2>
+                <ul>
+                    <li v-for="welcome in welcomes"
+                        :key="welcome.id"
+                        :index="welcome.id">
+                        <h2 align="left">{{welcome.val}}</h2>
+                    </li>
+
+                </ul>
             </div>
         </div>
     </el-form>
@@ -67,7 +70,6 @@
                   callback();
               }
           };
-
           let validateCode2 = (rule, value, callback) => {
               if (value.length == this.ruleForm.show_verification.length) {
                   if (value.toLowerCase() !== this.ruleForm.show_verification.toLowerCase()) {
@@ -85,6 +87,13 @@
               }
           };
           return {
+              welcomes:[
+                  { id:1,val: '运维，让业务不再裸奔' },
+                  { id:2,val: '运维无处不在，生活自由自在' },
+                  { id:3,val: '互联网+时代，拼运营是表象，拼运维是本质' },
+                  { id:4,val: '让运维人员在电脑前喝喝咖啡，才是好运维' },
+                  { id:5,val: '运让运维从负担转为生产力' }
+              ],
               svr: config(),
               ruleForm:{
                   username: '',
@@ -199,10 +208,9 @@
         position: absolute;
         top: 200px;
         left: 10%;
+        font-size:15px;
         color: rgba(133, 137, 122, 0.85);
-
     }
-
 
     .logC a button {
         width : 100%;

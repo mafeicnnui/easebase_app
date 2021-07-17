@@ -42,7 +42,7 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main style="height:909px;">
+                <el-main style="height:1005px;">
                     <el-tabs v-model="editableTabsValue"  closable @tab-remove="removeTab" @tab-click="handleClick">
                         <el-tab-pane v-for="(item) in editableTabs"
                                      :key="item.name"
@@ -83,7 +83,7 @@
                 nowDate:'',
                 windowWidth : document.documentElement.clientWidth,    //实时屏幕宽度
                 windowHeight: document.documentElement.clientHeight,   //实时屏幕高度
-                treeHeight  :(document.documentElement.clientHeight-280).toString()+"px",
+                treeHeight  :(document.documentElement.clientHeight-120).toString()+"px",
                 tree_style : {
                     width:"210px",
                     height: this.treeHeight,
@@ -92,12 +92,11 @@
                 },
                 aside_style:{
                     width:"210px",
-                    // height: this.treeHeight,
                     padding:"0px",
                     margin:"0px",
                 },
                 container_style:{
-                    height: "847px",
+                    height: (document.documentElement.clientHeight-120).toString()+"px",
                     padding:"0px",
                     margin:"0px",
                 }
@@ -106,6 +105,7 @@
         created: function() {
             this.nav = utils.get_tree();
             console.log('tree height=',this.treeHeight)
+            console.log('doc height=',this.windowHeight)
         },
         mounted() {
             this.currentTime();
@@ -191,17 +191,7 @@
     ::-webkit-scrollbar {
         width:1px;
     }
-    /* 滚动槽 */
-    ::-webkit-scrollbar-track {
-        -webkit-box-shadow:inset006px rgba(0,0,0,0.3);
-        border-radius:10px;
-    }
-    /* 滚动条滑块 */
-    ::-webkit-scrollbar-thumb {
-        border-radius:10px;
-        background:rgba(0,0,0,0.1);
-        -webkit-box-shadow:inset006px rgba(0,0,0,0.5);
-    }
+
     ::-webkit-scrollbar-thumb:window-inactive {
         background:rgba(255,0,0,0.4);
     }
@@ -211,15 +201,12 @@
         height: 60px;
     }
     .el-aside {
-
         position: relative;
     }
 
     .el-main {
-        /*position: absolute;*/
         overflow-y: scroll;
     }
-
 
     pre {
         display: inline;

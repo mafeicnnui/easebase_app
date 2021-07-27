@@ -123,11 +123,58 @@
       created() {
          this.createCode();
       },
+      mounted() {
+         this.check();
+      },
       methods: {
+          exceptions:function(error) {
+              console.log('error=',error)
+              if (error.response.status === 401) {
+                  this.$alert('用户无权访问!', '提示', {
+                      confirmButtonText: '确定',
+                      callback: () => {
+                          this.$router.push('/login');
+                      }
+                  });
+              } else if  (error.response.status === 402) {
+                  this.$alert('用户认证已过期，请重新登陆!', '提示', {
+                      confirmButtonText: '确定',
+                      callback: ()=> {
+                          this.$router.push('/login');
+                      }
+                  });
+              }
+          },
+          check:function(){
+              let token = localStorage.getItem('Authorization')
+              //检验token是否合法
+              console.log('token=',token)
+              axios({
+                  method: 'post',
+                  url: utils.stringFormat("http://{0}:{1}/check",[this.svr['server_ip'], this.svr['server_port']]),
+                  params: {
+                      token : token,
+                  },
+                  timeout: 10000,
+              }).then((res) => {
+                  console.log('check=>res=',res)
+                  if (res.data['Code'] == 200 ) {
+                      this.$alert('证书未过期，跳转主页!', '提示', {
+                          confirmButtonText: '确定',
+                          callback: () => {
+                              this.$router.push('/index');
+                          }
+                      });
+
+                  }
+              }).catch((error) => {
+                  console.log('error=',error);
+              });
+          },
           login:function(formName){
               this.$refs[formName].validate((valid) => {
                   if (valid) {
-                              axios({
+                          axios({
                                   method: 'post',
                                   url: utils.stringFormat("http://{0}:{1}/login",[this.svr['server_ip'], this.svr['server_port']]),
                                   params: {
@@ -186,20 +233,6 @@
         top: 100px;
         right: 15%;
         /*border: 5px solid blue;*/
-    }
-
-    .glare {
-        /* 设置渐变背景 */
-        background: linear-gradient(
-                45deg,
-                rgba(255, 255, 255, 0) 45%,
-                rgba(255, 255, 255, 0.8) 50%,
-                rgba(255, 255, 255, 0) 55%,
-                rgba(255, 255, 255, 0) 100%
-        );
-        background-size: 200%;
-        /* 使用背景图动画 */
-        animation: glare 1s infinite;
     }
 
     #wrap .logGet2 {

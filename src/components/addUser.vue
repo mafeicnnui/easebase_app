@@ -122,11 +122,11 @@
             expire_date:'',
             status:'1',
             sys_role: [
-              {value:1,label:'系统管理员'},
-              {value:2,label:'开发人员'},
-              {value:3,label:'测试人员'},
-              {value:4,label:'实施人员'},
-              {value:5,label:'数据库管理员'},
+              // {value:1,label:'系统管理员'},
+              // {value:2,label:'开发人员'},
+              // {value:3,label:'测试人员'},
+              // {value:4,label:'实施人员'},
+              // {value:5,label:'数据库管理员'},
             ],
             user_role: []
           }
@@ -212,6 +212,7 @@
     mounted: function() {
       this.getDm('04')
       this.getDm('01')
+      this.form.sys_role= utils.get_sysRole()
     } ,
   }
 

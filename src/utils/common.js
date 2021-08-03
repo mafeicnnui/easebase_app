@@ -76,6 +76,23 @@ export  function get_dm(p_dm) {
     return result;
 }
 
+export  function get_sysRole() {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/role/sys",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
+        datatype: "json",
+        async:false,
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
+
 export  function get_backup_server() {
     let result = '';
     $.ajax({
@@ -205,5 +222,6 @@ export default {
     get_backup_tasks,
     get_sync_tasks,
     getBeforeDate,
+    get_sysRole
 
 };

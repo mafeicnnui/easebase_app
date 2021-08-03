@@ -253,7 +253,7 @@
             status      : this.editForm.status,
             role_privileges  : this.editForm.rolePrivileges,
           },
-          timeout: 3000,
+          timeout: 3000000,
         }).then((res) => {
           if (res.data['Code'] == 200 ) {
             this.$notify({

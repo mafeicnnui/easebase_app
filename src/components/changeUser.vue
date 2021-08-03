@@ -370,10 +370,12 @@
               timeout: 1000,
             }).then((res) => {
               if (res.data['Code'] == 200 ) {
+                console.log("获取用户角色信息=",res.data['Data'])
                 let roles = [];
                 for (let i=0;i<res.data['Data'].length;i++)  {
-                  roles[i]= res.data['Data'][i]['RoleId']
+                  roles[i]= res.data['Data'][i]['role_id']
                 }
+                console.log('userRoles=',roles)
                 this.editForm.user_role  = roles
               }
             }).catch((error) => {
@@ -434,6 +436,8 @@
     mounted: function() {
       this.getDm('04');
       this.getDm('01');
+      this.editForm.sys_role= utils.get_sysRole()
+      // console.log("this.editForm.sys_role=",this.editForm.sys_role)
       this.queryUser();
     }
   }

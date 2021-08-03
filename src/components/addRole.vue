@@ -111,22 +111,11 @@
     },
     mounted: function() {
       this.getQx();
-    } ,
+    },
   }
 
 </script>
 
 <style scoped>
-    /*.el-transfer-panel {*/
-    /*    width: 300px;*/
-    /*    height: 400px;*/
-    /*    font-size:5px;*/
-    /*}*/
 
-    /*.el-transfer-panel__list.is-filterable{*/
-    /*    height: 400px;*/
-    /*}*/
-    /*.el-transfer-panel__header,.el-transfer-panel__body {*/
-    /*    text-align: left;*/
-    /*}*/
 </style>

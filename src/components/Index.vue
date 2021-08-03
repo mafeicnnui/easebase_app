@@ -2,9 +2,9 @@
      <el-container>
           <el-header style="height:60px;width:100%;color:black;background-color:#fbfdff;padding:0px;margin:0px;">
              <el-row justify="center" align="middle">
-                 <el-col :span="3" style="height:60px;width:209px;background-color:rgb(84, 92, 100);color:white" ><br><i class="ion-coffee"></i> EaseBase2.0</el-col>
-                 <el-col :span="8"><br>{{nowDate}}</el-col>
-                 <el-col :span="11"><br>{{tips}}<pre> </pre></el-col>
+                 <el-col :span="3" style="height:60px;width:209px;background-color:rgb(84,92,100);color:#94c9a8" ><br><i class="ion-coffee"></i> EaseBase 2.0</el-col>
+                 <el-col :span="10"><br>{{nowDate}}</el-col>
+                 <el-col :span="9"><br>{{tips}}<pre> </pre></el-col>
                  <el-col :span="2">
                       <el-dropdown>
                           <span class="el-dropdown-link"><br>
@@ -21,10 +21,9 @@
          </el-header>
 
          <el-container :style="container_style">
-                <el-aside :style="aside_style" >
+                <el-aside :style="aside_style" style="background-color:#545c64" class="menuScroll">
                     <el-menu router
                              :default-active="$route.path"
-                             class="el-menu-vertical-demo"
                              background-color="#545c64"
                              text-color="#fff"
                              active-text-color="#ffd04b"
@@ -42,7 +41,7 @@
                     </el-menu>
                 </el-aside>
 
-                <el-main style="height:1005px;">
+                <el-main :style="main_style">
                     <el-tabs v-model="editableTabsValue"  closable @tab-remove="removeTab" @tab-click="handleClick">
                         <el-tab-pane v-for="(item) in editableTabs"
                                      :key="item.name"
@@ -89,16 +88,21 @@
                     height: this.treeHeight,
                     padding:"0px",
                     margin:"0px",
+                    background_color:"#545c64"
                 },
                 aside_style:{
                     width:"210px",
                     padding:"0px",
                     margin:"0px",
+                    height: this.treeHeight,
                 },
                 container_style:{
                     height: (document.documentElement.clientHeight-120).toString()+"px",
                     padding:"0px",
                     margin:"0px",
+                },
+                main_style:{
+                    height: this.treeHeight,
                 }
             }
         },
@@ -176,7 +180,7 @@
                 minute = minute < 10 ? "0" + minute : minute; // 如果只有一位，则前面补零
                 let second = date.getSeconds(); // 秒
                 second = second < 10 ? "0" + second : second; // 如果只有一位，则前面补零
-                this.nowDate = `${year}年${month}月${day}日 ${hour}时${minute}分${second}秒   ${weekArr[week]}`;
+                this.nowDate = `${year}年${month}月${day}日 ${hour}时 ${minute}分${second}秒    ${weekArr[week]}`;
             },
             logout() {
                 localStorage.removeItem('Authorization')
@@ -186,15 +190,32 @@
     }
 </script>
 
-<style >
+<style>
     /* 设置滚动条的样式 */
-    ::-webkit-scrollbar {
+    .menuScroll::-webkit-scrollbar {
         width:1px;
     }
 
-    ::-webkit-scrollbar-thumb:window-inactive {
-        background:rgba(255,0,0,0.4);
+    .menuScroll::-webkit-scrollbar-track {
+        opacity: 0;
+        transition: opacity 0.12s ease-out;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
     }
+
+    .menuScroll::-webkit-scrollbar-thumb {
+        background-color: hsla(220, 4%, 58%, 0.3);
+        transition: background-color 0.3s;
+        -webkit-border-radius: 2em;
+        -moz-border-radius: 2em;
+        border-radius: 2em;
+    }
+
+    pre {
+        display: inline;
+    }
+
     .el-header {
         position: relative;
         width: 100%;
@@ -206,47 +227,6 @@
 
     .el-main {
         overflow-y: scroll;
-    }
-
-    pre {
-        display: inline;
-    }
-
-    .el-dropdown-link {
-        cursor: pointer;
-        color: black;
-    }
-    .el-icon-arrow-down {
-        font-size: 12px;
-    }
-
-    .el-submenu /deep/ .el-submenu__title:hover
-    {
-        color: rgba(255, 134, 50, 1) !important;
-        background-color: #ad9d9d !important;
-    }
-
-    .el-submenu i
-     {
-        font-size: 15px;
-     }
-
-    .el-submenu,.el-submenu__title  {
-        padding-left :0px !important;
-        margin-left  :0px !important;
-     }
-
-    .el-transfer-panel {
-        width: 300px;
-        height: 400px;
-        font-size:5px;
-    }
-
-    .el-transfer-panel__list.is-filterable{
-        height: 400px;
-    }
-    .el-transfer-panel__header,.el-transfer-panel__body {
-        text-align: left;
     }
 
 </style>

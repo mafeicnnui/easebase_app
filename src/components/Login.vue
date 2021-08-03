@@ -107,7 +107,7 @@
               rules: {
                   username: [
                       { required: true, message: '请输入用户名', trigger: 'blur' },
-                      { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }
+                      { min: 5, max: 20, message: '长度在 5 到 10 个字符', trigger: 'blur' }
                   ],
                   password: [
                       { required: true, message: '请输入密码', trigger: 'change' }
@@ -165,10 +165,14 @@
                               this.$router.push('/index');
                           }
                       });
-
                   }
               }).catch((error) => {
-                  console.log('error=',error);
+                  // console.log('error=',error);
+                  if (error.response.status === 401) {
+                      console.log('用户无权访问!')
+                  } else if  (error.response.status === 402) {
+                      console.log('用户认证已过期，请重新登陆!')
+                  }
               });
           },
           login:function(formName){

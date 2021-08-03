@@ -12,6 +12,7 @@ export default {
 </script>
 
 <style>
+
     #app {
       font-family: Avenir, Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -22,15 +23,23 @@ export default {
 
     .el-transfer-panel {
         width: 300px;
-        height: 400px;
+        height:400px;
         font-size:5px;
     }
 
-    .el-transfer-panel__list.is-filterable{
-        height: 400px;
+    .el-transfer-panel__list.is-filterable {
+        height: 284px;
+        padding-top: 0;
+        overflow-y: scroll;
     }
-    .el-transfer-panel__header,.el-transfer-panel__body {
+
+    .el-transfer-panel__header{
         text-align: left;
+    }
+
+    .el-transfer-panel__body {
+        text-align: left;
+        height:400px;
     }
 
     body {

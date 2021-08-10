@@ -140,7 +140,7 @@
                   this.$alert('用户认证已过期，请重新登陆!', '提示', {
                       confirmButtonText: '确定',
                       callback: ()=> {
-                          this.$router.push('/login');
+                          // this.$router.push('/login');
                       }
                   });
               }
@@ -167,7 +167,7 @@
                       });
                   }
               }).catch((error) => {
-                  // console.log('error=',error);
+                  console.log('error=',error);
                   if (error.response.status === 401) {
                       console.log('用户无权访问!')
                   } else if  (error.response.status === 402) {
@@ -189,10 +189,16 @@
                           }).then((res) => {
                               console.log('login=>res=',res)
                               if (res.data['Code'] == 200 ) {
-                                  localStorage.setItem('Authorization',res.data['Data'])
+                                  localStorage.setItem('Authorization', res.data['Data'])
                                   this.$router.push('/index');
+                              } else if  (res.data['Code'] == 500 ) {
+                                  console.log(res.data['Msg'])
+                                  this.$message({
+                                      message: res.data['Msg'],
+                                      type: 'error'
+                                  });
                               } else {
-                                  this.$router.push('/login');
+                                  //this.$router.push('/login');
                               }
                           }).catch((error) => {
                               console.log('error=',error);
@@ -220,7 +226,10 @@
 </script>
 
 <style >
-
+   .el-message {
+        top:200px !important;
+        z-index: 99999 !important;
+    }
     #wrap {
         height: 600px;
         width: 100%;

@@ -206,6 +206,26 @@ export function getBeforeDate(n) {
     return s;
 }
 
+export  function decrypt(key,password) {
+    let result = '';
+    $.ajax({
+        url: stringFormat("http://{0}:{1}/api/public/decrypt",[cfg.server_ip, cfg.server_port]),
+        type: "get",
+        headers: {
+            'Authorization': localStorage.getItem('Authorization'),
+        },
+        datatype: "json",
+        async:false,
+        data:{
+            key: key,
+            password:password
+        },
+        success: function (res) {
+            result =  res['Data']
+        }
+    });
+    return result;
+}
 
 export function getWelcome() {
 
@@ -222,6 +242,7 @@ export default {
     get_backup_tasks,
     get_sync_tasks,
     getBeforeDate,
-    get_sysRole
+    get_sysRole,
+    decrypt
 
 };

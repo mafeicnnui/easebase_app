@@ -356,6 +356,7 @@
             this.editForm.login_name  = res.data['Data'].LoginName
             this.editForm.emp_no      = res.data['Data'].EmpNo
             this.editForm.password    = res.data['Data'].Password
+            this.editForm.password    = utils.decrypt(this.editForm.login_name,this.editForm.password)
             this.editForm.gender      = res.data['Data'].Gender
             this.editForm.dept_no     = res.data['Data'].DeptNo
             this.editForm.email       = res.data['Data'].Email

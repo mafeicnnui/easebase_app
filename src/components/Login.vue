@@ -29,7 +29,7 @@
                 </div>
                 <el-form-item>
                     <div class="logC">
-                        <a><button @click="login('ruleForm')">登 录</button></a>
+                        <a><button @click="login()">登 录</button></a>
                     </div>
                 </el-form-item>
                 <el-form-item>
@@ -148,35 +148,39 @@
           check:function(){
               let token = localStorage.getItem('Authorization')
               //检验token是否合法
-              console.log('token=',token)
-              axios({
-                  method: 'post',
-                  url: utils.stringFormat("http://{0}:{1}/check",[this.svr['server_ip'], this.svr['server_port']]),
-                  params: {
-                      token : token,
-                  },
-                  timeout: 10000,
-              }).then((res) => {
-                  console.log('check=>res=',res)
-                  if (res.data['Code'] == 200 ) {
-                      this.$alert('证书未过期，跳转主页!', '提示', {
-                          confirmButtonText: '确定',
-                          callback: () => {
-                              this.$router.push('/index');
-                          }
-                      });
-                  }
-              }).catch((error) => {
-                  console.log('error=',error);
-                  if (error.response.status === 401) {
-                      console.log('用户无权访问!')
-                  } else if  (error.response.status === 402) {
-                      console.log('用户认证已过期，请重新登陆!')
-                  }
-              });
+              if (token != null ) {
+                  axios({
+                      method: 'post',
+                      url: utils.stringFormat("http://{0}:{1}/check",[this.svr['server_ip'], this.svr['server_port']]),
+                      params: {
+                          token : token,
+                      },
+                      timeout: 10000,
+                  }).then((res) => {
+                      console.log('check=>res=',res)
+                      if (res.data['Code'] == 200 ) {
+                          this.$alert('证书未过期，跳转主页!', '提示', {
+                              confirmButtonText: '确定',
+                              callback: () => {
+                                  this.$router.push('/index');
+                              }
+                          });
+                      }
+                  }).catch((error) => {
+                      //console.log('error=',error);
+                      if (error.response.status === 401) {
+                          this.$message('用户无权访问!')
+                          //console.log('用户无权访问!')
+                      } else if  (error.response.status === 402) {
+                          //console.log('用户认证已过期，请重新登陆!')
+                          this.login()
+                      }
+                  });
+              }
+
           },
-          login:function(formName){
-              this.$refs[formName].validate((valid) => {
+          login:function(){
+              this.$refs['ruleForm'].validate((valid) => {
                   if (valid) {
                           axios({
                                   method: 'post',
@@ -199,14 +203,17 @@
                                   });
                               } else {
                                   //this.$router.push('/login');
+                                  this.$message('登陆异常!')
                               }
                           }).catch((error) => {
                               console.log('error=',error);
+                              this.$message('登陆异常!')
                           });
 
                   } else {
                       console.log('登陆异常!');
-                      return false;
+
+                      //return false;
                   }
               });
           },

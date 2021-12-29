@@ -2,8 +2,8 @@
      <el-container>
           <el-header style="height:60px;width:100%;color:black;background-color:#fbfdff;padding:0px;margin:0px;">
              <el-row justify="center" align="middle">
-                 <el-col :span="3" style="height:60px;width:209px;background-color:rgb(84,92,100);color:#94c9a8" ><br><i class="ion-coffee"></i> EaseBase 2.0</el-col>
-                 <el-col :span="10"><br>{{nowDate}}</el-col>
+                 <el-col :span="3" style="height:60px;width:179px;background-color:rgb(84,92,100);color:#94c9a8" ><br><i class="ion-coffee"></i> EaseBase 2.0</el-col>
+                 <el-col :span="10" style="text-align: left"><br><pre>     </pre>{{nowDate}}</el-col>
                  <el-col :span="9"><br>{{tips}}<pre> </pre></el-col>
                  <el-col :span="2">
                       <el-dropdown>
@@ -28,6 +28,7 @@
                              text-color="#fff"
                              active-text-color="#ffd04b"
                              :collapse="isCollapse"
+                             width:150px
                          >
                         <el-submenu v-for="item in nav" :key="item.name" :index="item.id" >
                             <template slot="title"><i :class="item.icon"></i><pre>&nbsp;</pre><span>{{ item.name }}</span></template>
@@ -55,7 +56,7 @@
 
           <el-footer style="height:60px;width:100%;color:black;background-color:#fbfdff;padding:0px;margin:0px;">
               <el-row  justify="center" align="middle">
-                  <el-col :span="3" style="height:60px;width:209px;background-color:rgb(84, 92, 100);color:white" ></el-col>
+                  <el-col :span="3" style="height:60px;width:179px;background-color:rgb(84, 92, 100);color:white" ></el-col>
                   <el-col :span="21"><span>开发者：合商云汇DBA运维团队<pre>               </pre>邮箱:190343@lifeat.cn</span></el-col>
               </el-row>
           </el-footer>
@@ -84,14 +85,14 @@
                 windowHeight: document.documentElement.clientHeight,   //实时屏幕高度
                 treeHeight  :(document.documentElement.clientHeight-120).toString()+"px",
                 tree_style : {
-                    width:"210px",
+                    width:"180",
                     height: this.treeHeight,
                     padding:"0px",
                     margin:"0px",
                     background_color:"#545c64"
                 },
                 aside_style:{
-                    width:"210px",
+                    width:"180px",
                     padding:"0px",
                     margin:"0px",
                     height: this.treeHeight,
@@ -149,6 +150,7 @@
                             let nextTab = tabs[index + 1] || tabs[index - 1];
                             if (nextTab) {
                                 activeName = nextTab.name;
+                                this.$router.push({path: activeName});
                             }
                         }
                     });
@@ -227,6 +229,9 @@
 
     .el-main {
         overflow-y: scroll;
+    }
+    .el-submenu__title{
+        padding-left: 10px
     }
 
 </style>

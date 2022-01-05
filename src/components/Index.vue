@@ -186,7 +186,7 @@
             },
             logout() {
                 localStorage.removeItem('Authorization')
-                this.$router.push('/login');
+                this.$router.push('/');
             }
         }
     }

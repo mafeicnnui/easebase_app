@@ -26,7 +26,7 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(myCharts)
 // Vue.use(Vuex)
-Vue.prototype.axios = axios
+Vue.prototype.$axios = axios
 
 document.title='EaseBase 数据库运维平台'
 

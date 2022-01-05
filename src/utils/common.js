@@ -58,7 +58,6 @@ export  function get_tree() {
 export  function get_dm(p_dm) {
     let result = '';
     $.ajax({
-        //url: "http://10.16.47.114:9000/dm",
         url: stringFormat("http://{0}:{1}/dm",[cfg.server_ip, cfg.server_port]),
         type: "post",
         headers: {

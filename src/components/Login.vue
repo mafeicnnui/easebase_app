@@ -21,7 +21,7 @@
                 </div>
                 <div class="lgD">
                     <el-form-item prop="input_verification">
-                        <el-input   placeholder="请输入验证码"  v-model="ruleForm.input_verification">
+                        <el-input   placeholder="请输入验证码"  v-model="ruleForm.input_verification" @keyup.enter.native="login()">
                             <template slot="prepend"><i class="ion-ios7-pulse-strong"></i></template>
                             <template slot="append"><span :style="ruleForm.verification_color">{{ruleForm.show_verification}}</span></template>
                         </el-input>
@@ -29,7 +29,7 @@
                 </div>
                 <el-form-item>
                     <div class="logC">
-                        <a><button @click="login()">登 录</button></a>
+                        <el-button type="primary" @click="login()" style="width: 100%;">登 录</el-button>
                     </div>
                 </el-form-item>
                 <el-form-item>
@@ -54,8 +54,10 @@
 <script>
   import config from '@/utils/config.js';
   import utils from '@/utils/common.js'
-  import axios from "axios";
+  // import axios from "axios";
+  // import $ from 'jquery'
   import Particles from '@/components/particles/index';
+
 
   export default {
       components: {
@@ -127,29 +129,29 @@
          this.check();
       },
       methods: {
-          exceptions:function(error) {
-              console.log('error=',error)
-              if (error.response.status === 401) {
-                  this.$alert('用户无权访问!', '提示', {
-                      confirmButtonText: '确定',
-                      callback: () => {
-                          this.$router.push('/login');
-                      }
-                  });
-              } else if  (error.response.status === 402) {
-                  this.$alert('用户认证已过期，请重新登陆!', '提示', {
-                      confirmButtonText: '确定',
-                      callback: ()=> {
-                          // this.$router.push('/login');
-                      }
-                  });
-              }
-          },
+          // exceptions:function(error) {
+          //     console.log('error=',error)
+          //     if (error.response.status === 401) {
+          //         this.$alert('用户无权访问!', '提示', {
+          //             confirmButtonText: '确定',
+          //             callback: () => {
+          //                 this.$router.push('/login');
+          //             }
+          //         });
+          //     } else if  (error.response.status === 402) {
+          //         this.$alert('用户认证已过期，请重新登陆!', '提示', {
+          //             confirmButtonText: '确定',
+          //             callback: ()=> {
+          //                 // this.$router.push('/login');
+          //             }
+          //         });
+          //     }
+          // },
           check:function(){
               let token = localStorage.getItem('Authorization')
               //检验token是否合法
               if (token != null ) {
-                  axios({
+                  this.$axios({
                       method: 'post',
                       url: utils.stringFormat("http://{0}:{1}/check",[this.svr['server_ip'], this.svr['server_port']]),
                       params: {
@@ -167,53 +169,49 @@
                           });
                       }
                   }).catch((error) => {
-                      //console.log('error=',error);
+                      console.log('error=',error);
                       if (error.response.status === 401) {
                           this.$message('用户无权访问!')
-                          //console.log('用户无权访问!')
                       } else if  (error.response.status === 402) {
-                          //console.log('用户认证已过期，请重新登陆!')
-                          this.login()
+                          //this.$message('用户认证已过期，请重新登陆!')
                       }
                   });
               }
 
           },
           login:function(){
+              console.log('a=',this.ruleForm.username)
+              console.log('b=',this.ruleForm.password)
               this.$refs['ruleForm'].validate((valid) => {
                   if (valid) {
-                          axios({
-                                  method: 'post',
-                                  url: utils.stringFormat("http://{0}:{1}/login",[this.svr['server_ip'], this.svr['server_port']]),
-                                  params: {
-                                      username  : this.ruleForm.username,
-                                      password  : this.ruleForm.password
-                                  },
-                              timeout: 10000,
-                          }).then((res) => {
-                              console.log('login=>res=',res)
-                              if (res.data['Code'] == 200 ) {
-                                  localStorage.setItem('Authorization', res.data['Data'])
-                                  this.$router.push('/index');
-                              } else if  (res.data['Code'] == 500 ) {
-                                  console.log(res.data['Msg'])
-                                  this.$message({
-                                      message: res.data['Msg'],
-                                      type: 'error'
-                                  });
-                              } else {
-                                  //this.$router.push('/login');
-                                  this.$message('登陆异常!')
-                              }
-                          }).catch((error) => {
-                              console.log('error=',error);
+                      this.$axios({
+                              method: 'post',
+                              url: utils.stringFormat("http://{0}:{1}/login",[this.svr['server_ip'], this.svr['server_port']]),
+                              params: {
+                                  username  : this.ruleForm.username,
+                                  password  : this.ruleForm.password
+                              },
+                          timeout: 10000,
+                      }).then((res) => {
+                          if (res.data['Code'] == 200 ) {
+                              localStorage.setItem('Authorization', res.data['Data'])
+                              this.$router.push('/index');
+                          } else if  (res.data['Code'] == 500 ) {
+                              this.$message({
+                                  message: res.data['Msg'],
+                                  type: 'error'
+                              });
+                          } else {
                               this.$message('登陆异常!')
-                          });
+                          }
+                      }).catch((error) => {
+                          console.log('error=',error);
+                          this.$message('登陆异常!')
+                      });
+
 
                   } else {
                       console.log('登陆异常!');
-
-                      //return false;
                   }
               });
           },

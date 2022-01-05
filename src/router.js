@@ -47,11 +47,13 @@ const routes=[
     //单个路由均为对象类型，path代表的是路径，component代表组件
 
     // home
-    { path:'/',redirect:'/login'},
-    { path:'/login',name:'login',component:Login},
+    // { path:'/',redirect:'/login'},
+    { path:'/',name:'login',component:Login},
+    // { path:'/login',name:'login',component:Login},
+    { path:'/login',redirect:'/'},
     {
         path:'/index',
-        name:'index',
+        // name:'index',
         component:Index,
         children:[
             // default router
@@ -100,7 +102,7 @@ const routes=[
     },
 
     // default router
-    { path:'',component:queryUser},
+    // { path:'',component:queryUser},
 
 ]
 
@@ -112,20 +114,22 @@ const router=new VueRouter({
 
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
-// router.beforeEach((to, from, next) => {
-//     console.log('to.path=',to.path)
-//     if (to.path === '/login') {
-//         next();
-//     } else {
-//         let token = localStorage.getItem('Authorization');
-//
-//         if (token === null || token === '') {
-//             next('/login');
-//         } else {
-//             next();
-//         }
-//     }
-// });
+router.beforeEach((to, from, next) => {
+    console.log('to.path=',to)
+    console.log('from=',from)
+    next();
+    // if (to.path === '/login') {
+    //     next();
+    // } else {
+    //     let token = localStorage.getItem('Authorization');
+    //
+    //     if (token === null || token === '') {
+    //         next('/login');
+    //     } else {
+    //         next();
+    //     }
+    // }
+});
 
 //抛出这个这个实例对象方便外部读取以及访问
 export default router
